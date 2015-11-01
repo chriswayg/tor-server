@@ -75,11 +75,11 @@ DataDirectory /var/lib/tor
 
 ### Run Tor with mounted `torrc`
 
-Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation by mounting it, too, to continue with the same Fingerprint and ID. 
+Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay:/var/lib/tor/keys/secret_id_key ./`) by mounting it, too, to continue with the same Fingerprint and ID. 
 ```
 docker run -d --name=tor_relay_1 -p 9001:9001 \
--v ./torrc:/etc/tor/torrc \
--v ./secret_id_key:/var/lib/tor/keys/secret_id_key \
+-v $PWD/torrc:/etc/tor/torrc \
+-v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key \
 --restart=always chriswayg/tor-server
 ```
 
@@ -102,8 +102,8 @@ relay:
     CONTACT_EMAIL: email@example.org
 ```
 
-##### start the Tor server
-This will start a new instance of the Tor relay server, show the current fingerprint and display the logs:
+##### Start the Tor server
+Start a new instance of the Tor relay server, show the current fingerprint and display the logs:
 ```
 docker-compose up -d
 docker exec tor_relay_1 cat /var/lib/tor/fingerprint
