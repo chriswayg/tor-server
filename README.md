@@ -1,7 +1,7 @@
 ## Tor Relay Server on Docker
 
 ##### A complete, efficient and secure Tor relay server Docker image based on Debian Jessie 
-*This docker image will run Tor as an unprivileged regular user, as recommended by torproject.org*
+*This docker image will update automatically each time the Debian Jessie base image is updated and build & install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
 
 The Tor network relies on volunteers to donate bandwidth. The more people who run relays, the faster the Tor network will be. If you have at least 2 megabits/s for both upload and download, please help out Tor by configuring your Tor to be a relay too.
 
