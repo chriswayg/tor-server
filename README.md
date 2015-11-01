@@ -1,4 +1,5 @@
 ## Tor Relay Server on Docker
+[![](https://badge.imagelayers.io/chriswayg/tor-server:latest.svg)](https://imagelayers.io/?images=chriswayg/tor-server:latest)
 
 ##### A complete, efficient and secure Tor relay server Docker image based on Debian Jessie 
 *This docker image will update automatically each time the Debian Jessie base image is updated and build & install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
