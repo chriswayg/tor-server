@@ -1,0 +1,38 @@
+### /etc/torrc ### 
+# see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
+
+# Server's public IP Address (usually automatic)
+#Address 10.10.10.10
+
+# Port to advertise for incoming Tor connections. 
+# common ports are 9001, 443
+ORPort 9001
+
+# Mirror directory information for others (optional)
+# common ports are 9030, 80
+#DirPort 9030 
+
+# Run as a relay only (not as an exit node)
+ExitPolicy reject *:*         # no exits allowed
+
+# Set limits
+#RelayBandwidthRate 1024 KB   # Throttle traffic to
+#RelayBandwidthBurst 2048 KB  # But allow bursts up to
+#MaxMemInQueues 512 MB        # Limit Memory usage to
+
+# Run Tor as obfuscated bridge
+#ServerTransportPlugin obfs3 exec /usr/bin/obfsproxy managed
+#ServerTransportListenAddr obfs3  0.0.0.0:54444
+#BridgeRelay 1
+
+# Run Tor only as a server (no local applications)
+SocksPort 0
+
+# Run Tor as a regular user (do not change this)
+User debian-tor
+DataDirectory /var/lib/tor
+
+# If no Nickname or ContactInfo is set, docker-entrypoint will use 
+# the environment variables to add Nickname/ContactInfo here 
+#Nickname Tor4                 # only use letters and numbers
+#ContactInfo email@example.org
