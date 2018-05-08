@@ -20,11 +20,11 @@ state security.
 
 This will run a Tor relay server with defaults and a randomized Nickname:
 
-`docker run -d --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
+`docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
 
 You can set a Nickname (only letters and numbers) and a Contact Email using environment variables:
 ```
-docker run -d --name=tor_relay_1 -p 9001:9001 \
+docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
@@ -77,7 +77,7 @@ DataDirectory /var/lib/tor
 
 Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay:/var/lib/tor/keys/secret_id_key ./`) by mounting it, too, to continue with the same Fingerprint and ID.
 ```
-docker run -d --name=tor_relay_1 -p 9001:9001 \
+docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -v $PWD/torrc:/etc/tor/torrc \
 -v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key \
 --restart=always chriswayg/tor-server
@@ -89,25 +89,27 @@ Check with ```docker logs tor_relay_1```. If you see the message ```[notice] Sel
 
 Adapt this example `docker-compose.yml` with your settings:
 ```
-relay:
-  image: chriswayg/tor-server
-  restart: always
-  ports:
-    - "9001:9001"
-    - "9030:9030"
-  environment:
-    ## set your Nickname here (only use letters and numbers)
-    TOR_NICKNAME: Tor4docker
-    ## an email address to contact you
-    CONTACT_EMAIL: tor4@example.org
+version: '2.2'
+services:
+  relay:
+    image: chriswayg/tor-server
+    init: true
+    restart: always
+    ports:
+      - "9001:9001"
+    environment:
+      ## set your Nickname here (only use letters and numbers)
+      TOR_NICKNAME: Tor4docker
+      CONTACT_EMAIL: tor4@example.org
 ```
 
 ##### Start the Tor server
-Start a new instance of the Tor relay server, show the current fingerprint and display the logs:
+Start a new instance of the Tor relay server, display the logs and show the current fingerprint:
+
 ```
 docker-compose up -d
-docker-compose exec -T cat /var/lib/tor/fingerprint
 docker-compose logs
+docker-compose docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ```
 
 ### License:
