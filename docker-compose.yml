@@ -1,19 +1,21 @@
-relay:
-  image: chriswayg/tor-server
-  restart: always
-  ports:
-    - "9001:9001"
-    #- "9030:9030"
-    #- "54444:54444"
-  environment:
-    ## set your Nickname here (only use letters and numbers)
-    TOR_NICKNAME: Tor4
-    ## an email address to contact you
-    #CONTACT_EMAIL: email@example.org
-  #volumes:
-    ## mount custom torrc / secret_id_key here
-    #- ./torrc:/etc/tor/torrc
-    #- ./secret_id_key:/var/lib/tor/keys/secret_id_key
-  log_opt:
-      max-size: "512k"
-      max-file: "20"
+version: '2.2'
+services:
+  relay:
+    image: chriswayg/tor-server
+    init: true
+    restart: always
+    ports:
+      - "9001:9001"
+      #- "9030:9030"
+      #- "54444:54444"
+    environment:
+      ## set your Nickname here (only use letters and numbers)
+      # you can override this in `torrc`, if you mount it on the host
+      TOR_NICKNAME: Tor4
+      ## an email address to contact you
+      #CONTACT_EMAIL: tor4@example.org
+    #volumes:
+      ## mount custom `torrc` and/or `secret_id_key` here
+      # use absolute paths on host, for example:
+      #- /opt/tor-server/torrc:/etc/tor/torrc
+      #- /opt/tor-server/secret_id_key:/var/lib/tor/keys/secret_id_key
