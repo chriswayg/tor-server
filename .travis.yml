@@ -9,7 +9,12 @@ before_install:
 
 script:
   # Test building Dockerfile.
-  - docker build -t docker-ansible .
+  - docker build -t local-tor-server .
 
   # Test running the container.
-  - docker run --name test-container -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible /usr/lib/systemd/systemd
+  - docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always local-tor-server
+  - sleep 60
+  - docker logs tor_relay_1
+
+  # Also test docker-compose file
+  # ...
