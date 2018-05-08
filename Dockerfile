@@ -1,53 +1,54 @@
 #
-# Dockerfile for Tor Relay Server
+# Dockerfile for Tor Relay Server with obfs4proxy
 #
-# This will build & install a Tor Debian package using 
-# the official instructions for installing Tor on Debian Jessie from source
+# This will install the Tor Debian package and obfs4proxy using
+# the official instructions for installing Tor on Debian
 # as detailed here https://www.torproject.org/docs/debian.html.en
+# and https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy
 #
 # Usage:
 #   docker run -d --restart=always -p 9001:9001 chriswayg/tor-server
 
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER Christian chriswayg@gmail.com
 
 # If no Nickname is set, a random string will be added to 'Tor4'
-ENV TOR_NICKNAME=Tor4 \
-    TERM=xterm 
+ENV TOR_NICKNAME="Tor4" \
+    TERM="xterm"
+
+# Install prerequisites
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+      apt-transport-https \
+      ca-certificates \
+      dirmngr \
+      apt-utils \
+      gnupg && \
+    apt-get clean && rm -rv /var/lib/apt/lists/*
 
 # Add the official torproject.org Debian Tor repository
 # - this will always build/install the latest stable version
 COPY ./config/tor-apt-sources.list /etc/apt/sources.list.d/
 
-# Build & Install:
-# - add the gpg key used to sign the packages
-# - install build dependencies (and nano)
-# - add a 'builder' user for compiling the package as a non-root user
-# - build Tor in ~/debian-packages and install the new Tor package
-# - backup torrc & cleanup all dependencies and caches
-# - adds only 13 MB to the Debian base image (without obfsproxy, which adds another 60 MB)
-RUN gpg --keyserver keys.gnupg.net --recv 886DDD89 && \
-    gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add - && \
-    apt-get update && \
-    build_deps="build-essential fakeroot devscripts quilt libssl-dev zlib1g-dev libevent-dev \
-        asciidoc docbook-xml docbook-xsl xmlto dh-apparmor libseccomp-dev dh-systemd \
-        libsystemd-dev pkg-config dh-autoreconf hardening-includes" && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install $build_deps \
-        obfsproxy \
-        tor-geoipdb \
-        init-system-helpers \
-        pwgen \
-        nano && \ 
-    adduser --disabled-password --gecos "" builder && \
-    su builder -c 'mkdir -v ~/debian-packages; cd ~/debian-packages && \
-    apt-get -y source tor && \
-    cd tor-* && \
-    debuild -rfakeroot -uc -us' && \
-    dpkg -i /home/builder/debian-packages/tor_*.deb && \
+# Add GPG key used to sign the packages; try various keyservers
+RUN GPG_KEY="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89" && \
+     ( gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+    || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+    || gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" \
+    || gpg --keyserver keys.gnupg.net --recv-keys "$GPG_KEY" ) && \
+    gpg --export "$GPG_KEY" | apt-key add -
+
+# Install:
+# - install tor and obfs4proxy
+# - backup torrc
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+      pwgen \
+      tor \
+      deb.torproject.org-keyring \
+      obfs4proxy && \
     mv -v /etc/tor/torrc /etc/tor/torrc.default && \
-    deluser --remove-home builder && \
-    apt-get -y purge --auto-remove $build_deps && \
-    apt-get clean && rm -r /var/lib/apt/lists/*
+    apt-get clean && rm -rv /var/lib/apt/lists/*
 
 # Copy Tor configuration file
 COPY ./config/torrc /etc/tor/torrc
