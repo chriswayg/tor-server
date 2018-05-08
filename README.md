@@ -1,7 +1,6 @@
 ## Tor Relay Server on Docker
-[![](https://badge.imagelayers.io/chriswayg/tor-server:latest.svg)](https://imagelayers.io/?images=chriswayg/tor-server:latest)
 
-##### A complete, efficient and secure Tor relay server Docker image based on Debian Jessie 
+##### A complete, efficient and secure Tor relay server Docker image based on Debian Stretch
 *This docker image will update automatically each time the Debian Jessie base image is updated and build & install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
 
 The Tor network relies on volunteers to donate bandwidth. The more people who run relays, the faster the Tor network will be. If you have at least 2 megabits/s for both upload and download, please help out Tor by configuring your Tor to be a relay too.
@@ -34,19 +33,19 @@ docker run -d --name=tor_relay_1 -p 9001:9001 \
 
 For more detailed customisation edit `./torrc` on the host to the intended settings:
 ```
-### /etc/torrc ### 
+### /etc/torrc ###
 # see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
 
 # Server's public IP Address (usually automatic)
 #Address 10.10.10.10
 
-# Port to advertise for incoming Tor connections. 
+# Port to advertise for incoming Tor connections.
 # common ports are 9001, 443
 ORPort 9001
 
 # Mirror directory information for others (optional)
 # common ports are 9030, 80
-#DirPort 9030 
+#DirPort 9030
 
 # Run as a relay only (not as an exit node)
 ExitPolicy reject *:*         # no exits allowed
@@ -68,15 +67,15 @@ SocksPort 0
 User debian-tor
 DataDirectory /var/lib/tor
 
-# If no Nickname or ContactInfo is set, docker-entrypoint will use 
-# the environment variables to add Nickname/ContactInfo here 
+# If no Nickname or ContactInfo is set, docker-entrypoint will use
+# the environment variables to add Nickname/ContactInfo here
 #Nickname Tor4                 # only use letters and numbers
 #ContactInfo email@example.org
 ```
 
 ### Run Tor with mounted `torrc`
 
-Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay:/var/lib/tor/keys/secret_id_key ./`) by mounting it, too, to continue with the same Fingerprint and ID. 
+Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay:/var/lib/tor/keys/secret_id_key ./`) by mounting it, too, to continue with the same Fingerprint and ID.
 ```
 docker run -d --name=tor_relay_1 -p 9001:9001 \
 -v $PWD/torrc:/etc/tor/torrc \
@@ -98,18 +97,21 @@ relay:
     - "9030:9030"
   environment:
     ## set your Nickname here (only use letters and numbers)
-    TOR_NICKNAME: Tor4
+    TOR_NICKNAME: Tor4docker
     ## an email address to contact you
-    CONTACT_EMAIL: email@example.org
+    CONTACT_EMAIL: tor4@example.org
 ```
 
 ##### Start the Tor server
 Start a new instance of the Tor relay server, show the current fingerprint and display the logs:
 ```
 docker-compose up -d
-docker exec tor_relay_1 cat /var/lib/tor/fingerprint
+docker-compose exec -T cat /var/lib/tor/fingerprint
 docker-compose logs
 ```
+
+### License:
+ - GPLv3 (c) 2018 Christian Wagner
 
 ### References
 
@@ -117,4 +119,3 @@ docker-compose logs
 - https://www.torproject.org/projects/obfsproxy-debian-instructions.html.en
 
 [1]: https://www.torproject.org/
-
