@@ -1,5 +1,5 @@
 relay:
-  image: local/tor-server
+  image: chriswayg/tor-server
   restart: always
   ports:
     - "9001:9001"
