@@ -13,8 +13,8 @@ FROM debian:stretch
 MAINTAINER Christian chriswayg@gmail.com
 
 # If no Nickname is set, a random string will be added to 'Tor4'
-ENV TOR_NICKNAME="Tor4" \
-    TERM="xterm"
+ENV TOR_NICKNAME=Tor4 \
+    TERM=xterm
 
 # Install prerequisites
 RUN apt-get update && \
@@ -43,7 +43,6 @@ RUN GPG_KEY="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89" && \
 # - backup torrc
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-      pwgen \
       tor \
       deb.torproject.org-keyring \
       obfs4proxy && \
