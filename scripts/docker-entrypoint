@@ -9,7 +9,8 @@ chmodd() {
 }
 
 echo -e "\n========================================================"
-# If DataDirectory or secret_id_key is mounted here, it must be owned by the debian-tor user
+# If DataDirectory, torrc or secret_id_key is mounted here,
+# ownership needs to be changed to the debian-tor user
 chown -Rv debian-tor:debian-tor /var/lib/tor
 # fix permissions
 chmodd 700 /var/lib/tor
