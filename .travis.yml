@@ -11,10 +11,22 @@ script:
   # Test building Dockerfile.
   - docker build -t local-tor-server .
 
-  # Test running the container.
+  # Test running the container with the commands in the Readme
   - docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always local-tor-server
   - sleep 60
   - docker logs tor_relay_1
+  - docker stop tor_relay_1
+  - docker rm tor_relay_1
+
+  - docker run -d --init --name=tor_relay_1 -p 9001:9001 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org --restart=always local-tor-server
+  - sleep 60
+  - docker logs tor_relay_1
+  - docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./
+  - cat secret_id_key
+  - docker stop tor_relay_1
+  - docker rm tor_relay_1
 
   # Also test docker-compose file
-  # ...
+  - docker-compose up -d
+  - docker-compose logs
+  - docker-compose docker-compose exec -T relay cat /var/lib/tor/fingerprint
