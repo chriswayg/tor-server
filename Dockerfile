@@ -1,8 +1,5 @@
 # Dockerfile for Tor Relay Server with obfs4proxy
 #
-# TODO:
-# - add IPv6
-
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
 

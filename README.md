@@ -24,11 +24,11 @@ state security.
 
 This will run a Tor relay server with defaults and a randomized Nickname:
 
-`docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
+`docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 --restart=always chriswayg/tor-server`
 
 You can set your own Nickname (only letters and numbers) and your Contact-Email (which will be published on the Tor network) using environment variables:
 ```
-docker run -d --init --name=tor_relay_1 -p 9001:9001 \
+docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
@@ -81,7 +81,7 @@ ContactInfo email@example.org
 
 Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./`), to continue with the same Fingerprint and ID.
 ```
-docker run -d --init --name=tor_relay_1 -p 9001:9001 \
+docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 -p 9030:9030 \
 -v $PWD/torrc:/etc/tor/torrc \
 -v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key \
 --restart=always chriswayg/tor-server
@@ -120,7 +120,13 @@ docker-compose exec -T relay cat /var/lib/tor/fingerprint
 
 ### Run Tor Relay with IPv6
 
-The host system or VPS (for example Vultr) needs to have IPv6 activated. Additionally activate IPv6 for Docker by editing/creating the file `daemon.json` on the docker host and restarting Docker.
+The host system or VPS (for example Vultr) needs to have IPv6 activated. From your server try to ping any IPv6 host: `ping6 google.com`
+
+If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration (example for ORPort 9001):
+
+`ORPort [IPv6-address]:9001`
+
+Additionally activate IPv6 for Docker by editing/creating the file `daemon.json` on the docker host and restarting Docker.
 
 - use the IPv6 subnet/64 address from your provider for `fixed-cidr-v6`
 
@@ -132,7 +138,7 @@ $ nano /etc/docker/daemon.json
 "fixed-cidr-v6": "2100:1900:4400:4abc::/64"
 }
 
-systemctl restart docker
+$ systemctl restart docker
 ```
 
 ### License:

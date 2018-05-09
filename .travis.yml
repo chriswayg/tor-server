@@ -12,13 +12,13 @@ script:
   - docker build -t local-tor-server .
 
   # Test running the container with the commands in the Readme
-  - docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always local-tor-server
+  - docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
-  - docker run -d --init --name=tor_relay_1 -p 9001:9001 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org --restart=always local-tor-server
+  - docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
   - docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./
@@ -26,7 +26,7 @@ script:
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
-  - docker run -d --init --name=tor_relay_1 -p 9001:9001 -v $PWD/tests/torrc:/etc/tor/torrc -v $PWD/tests/secret_id_key:/var/lib/tor/keys/secret_id_key --restart=always local-tor-server
+  - docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 -p 9030:9030 -v $PWD/tests/torrc:/etc/tor/torrc -v $PWD/tests/secret_id_key:/var/lib/tor/keys/secret_id_key --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
   - docker stop tor_relay_1
