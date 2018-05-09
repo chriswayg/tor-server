@@ -37,7 +37,7 @@ RUN set -x \
   		pgp.mit.edu \
 	; do \
 		echo "Fetching GPG key $GPGKEY from $server"; \
-		apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPGKEY" && found=yes && break; \
+		APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE="True" apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPGKEY" && found=yes && break; \
 	done; \
 	test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPGKEY" && exit 1; \
   apt-get remove --purge --auto-remove -y gnupg && apt-get clean && rm -rf /var/lib/apt/lists/*
