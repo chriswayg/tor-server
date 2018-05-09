@@ -1,6 +1,6 @@
 ## Tor Relay Server on Docker
-[![](https://images.microbadger.com/badges/version/chriswayg/tor-server.svg)](https://microbadger.com/images/chriswayg/tor-server "Get your own version badge on microbadger.com")
-[![](https://images.microbadger.com/badges/image/chriswayg/tor-server.svg)](https://microbadger.com/images/chriswayg/tor-server "Get your own image badge on microbadger.com")
+[![Build Status](https://travis-ci.org/chriswayg/tor-server.svg?branch=master)](https://travis-ci.org/chriswayg/tor-server)
+[![](https://images.microbadger.com/badges/image/chriswayg/tor-server.svg)](https://microbadger.com/images/chriswayg/tor-server)
 
 ##### A complete, efficient and secure Tor relay server Docker image based on Debian Stretch
 *This docker image will update automatically each time the Debian Jessie base image is updated and build & install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
