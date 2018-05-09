@@ -10,18 +10,17 @@ MAINTAINER Christian chriswayg@gmail.com
 # If no Nickname is set, a random string will be added to 'Tor4'
 ENV TOR_NICKNAME=Tor4 \
     TERM=xterm
-
-RUN set -x \
+    
 # Install prerequisites
-	&& apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
+RUN apt-get update &&  \
+	DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
       apt-transport-https \
       ca-certificates \
       dirmngr \
       apt-utils \
       pwgen \
       gnupg && \
- # Add torproject.org Debian repository, which will always install the latest stable version
+  # Add torproject.org Debian repository, which will always install the latest stable version
 	GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89; \
 	found=''; \
 	for server in \
