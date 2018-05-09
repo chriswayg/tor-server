@@ -35,5 +35,6 @@ script:
   # Also test docker-compose file (probably with the previous build on docker hub)
   - docker-compose --version
   - docker-compose up -d
+  - sleep 30
   - docker-compose logs
   - docker-compose exec -T relay cat /var/lib/tor/fingerprint
