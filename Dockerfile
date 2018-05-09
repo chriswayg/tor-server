@@ -10,7 +10,7 @@
 # - add GeoIP
 # - add IPv6
 
-FROM debian:stretch
+FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
 
 # If no Nickname is set, a random string will be added to 'Tor4'
