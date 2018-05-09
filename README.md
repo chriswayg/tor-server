@@ -26,7 +26,7 @@ This will run a Tor relay server with defaults and a randomized Nickname:
 
 `docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
 
-You can set your own Nickname (only letters and numbers) and your Contact-Email using environment variables:
+You can set your own Nickname (only letters and numbers) and your Contact-Email (which will be published on the Tor network) using environment variables:
 ```
 docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
