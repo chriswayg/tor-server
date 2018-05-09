@@ -22,19 +22,19 @@ This will run a Tor relay server with defaults and a randomized Nickname:
 
 `docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
 
-You can set a Nickname (only letters and numbers) and a Contact Email using environment variables:
+You should set a Nickname (only letters and numbers) and a Contact Email using environment variables:
 ```
 docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
-
 ### Tor configuration
+Configuration File Options: https://www.torproject.org/docs/tor-manual.html.en
 
 For more detailed customisation edit `./torrc` on the host to the intended settings:
 ```
 ### /etc/torrc ###
-# see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
+# see /etc/torrc/torrc.default
 
 # Server's public IP Address (usually automatic)
 #Address 10.10.10.10
@@ -115,9 +115,11 @@ docker-compose docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ### License:
  - GPLv3 (c) 2018 Christian Wagner
 
-### References
+### Guides
 
-- https://www.torproject.org/docs/tor-relay-debian.html.en
-- https://www.torproject.org/projects/obfsproxy-debian-instructions.html.en
+- [Tor Relay Guide](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide)
+- [Tor on Debian Installation Instructions](https://www.torproject.org/docs/debian.html.en)
+- [obfs4proxy on Debian - Guide to run an obfuscated bridge to help censored users connect to the Tor network.](https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy)
+
 
 [1]: https://www.torproject.org/
