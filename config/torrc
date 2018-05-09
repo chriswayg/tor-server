@@ -14,6 +14,7 @@ ORPort 9001
 
 # Run as a relay only (not as an exit node)
 ExitPolicy reject *:*         # no exits allowed
+ExitRelay 0
 
 # Set limits
 #RelayBandwidthRate 1024 KB   # Throttle traffic to
@@ -29,6 +30,7 @@ ExitPolicy reject *:*         # no exits allowed
 
 # Run Tor only as a server (no local applications)
 SocksPort 0
+ControlSocket 0
 
 # Run Tor as a regular user (do not change this)
 User debian-tor
@@ -38,5 +40,5 @@ GeoIPv6File /etc/tor/geoip6
 
 ## If no Nickname or ContactInfo is set, docker-entrypoint will use
 ## the environment variables to add Nickname/ContactInfo here
-#Nickname Tor4                 # only use letters and numbers
-#ContactInfo email@example.org
+#Nickname Tor4tests                 # only use letters and numbers
+#ContactInfo tor4tests@example.org
