@@ -1,6 +1,0 @@
-# Tor stable repository
-deb https://deb.torproject.org/torproject.org stretch main
-deb-src https://deb.torproject.org/torproject.org stretch main
-
-# Tor obfs4proxy repository
-deb http://deb.torproject.org/torproject.org obfs4proxy main
