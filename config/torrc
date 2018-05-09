@@ -33,6 +33,8 @@ SocksPort 0
 # Run Tor as a regular user (do not change this)
 User debian-tor
 DataDirectory /var/lib/tor
+GeoIPFile /etc/tor/geoip
+GeoIPv6File /etc/tor/geoip6
 
 ## If no Nickname or ContactInfo is set, docker-entrypoint will use
 ## the environment variables to add Nickname/ContactInfo here
