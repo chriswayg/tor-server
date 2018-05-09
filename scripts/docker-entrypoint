@@ -1,9 +1,19 @@
 #!/bin/bash
 set -o errexit
 
+chmodf() {
+        find $2 -type f -exec chmod -v $1 {} \;
+}
+chmodd() {
+        find $2 -type d -exec chmod -v $1 {} \;
+}
+
 echo -e "\n========================================================"
 # If DataDirectory or secret_id_key is mounted here, it must be owned by the debian-tor user
 chown -Rv debian-tor:debian-tor /var/lib/tor
+# fix permissions
+chmodd 700 /var/lib/tor
+chmodf 600 /var/lib/tor
 
 if [ ! -e /tor-config-done ]; then
     touch /tor-config-done   # only run this once
