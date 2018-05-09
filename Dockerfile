@@ -23,7 +23,7 @@ RUN set -x \
       apt-transport-https \
       ca-certificates \
       dirmngr \
-      apt-utils
+      apt-utils \
       pwgen \
       gnupg && \
 	GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89; \
