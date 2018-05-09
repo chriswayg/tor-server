@@ -1,13 +1,14 @@
-#
 # Dockerfile for Tor Relay Server with obfs4proxy
 #
 # This will install the Tor Debian package and obfs4proxy using
 # the official instructions for installing Tor on Debian
-# as detailed here https://www.torproject.org/docs/debian.html.en
-# and https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy
 #
 # Usage:
-#   docker run -d --restart=always -p 9001:9001 chriswayg/tor-server
+#   docker run -d --init --restart=always -p 9001:9001 chriswayg/tor-server
+#
+# TODO:
+# - add GeoIP
+# - add IPv6
 
 FROM debian:stretch
 MAINTAINER Christian chriswayg@gmail.com
@@ -16,38 +17,45 @@ MAINTAINER Christian chriswayg@gmail.com
 ENV TOR_NICKNAME=Tor4 \
     TERM=xterm
 
-# Install prerequisites
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+RUN set -x \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
       apt-transport-https \
       ca-certificates \
       dirmngr \
-      apt-utils \
+      apt-utils
+      pwgen \
       gnupg && \
-    apt-get clean && rm -rv /var/lib/apt/lists/*
+	GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89; \
+	found=''; \
+	for server in \
+  		ha.pool.sks-keyservers.net \
+  		hkp://keyserver.ubuntu.com:80 \
+  		hkp://p80.pool.sks-keyservers.net:80 \
+      ipv4.pool.sks-keyservers.net \
+      keys.gnupg.net \
+  		pgp.mit.edu \
+	; do \
+		echo "Fetching GPG key $GPGKEY from $server"; \
+		apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPGKEY" && found=yes && break; \
+	done; \
+	test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPGKEY" && exit 1; \
+  apt-get remove --purge --auto-remove -y gnupg && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add the official torproject.org Debian Tor repository
-# - this will always build/install the latest stable version
+# - this will always install the latest stable version
 COPY ./config/tor-apt-sources.list /etc/apt/sources.list.d/
-
-# Add GPG key used to sign the packages; try various keyservers
-RUN GPG_KEY="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89" && \
-     ( gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
-    || gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
-    || gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" \
-    || gpg --keyserver keys.gnupg.net --recv-keys "$GPG_KEY" ) && \
-    gpg --export "$GPG_KEY" | apt-key add -
 
 # Install:
 # - install tor and obfs4proxy
 # - backup torrc
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
       tor \
       deb.torproject.org-keyring \
       obfs4proxy && \
     mv -v /etc/tor/torrc /etc/tor/torrc.default && \
-    apt-get clean && rm -rv /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy Tor configuration file
 COPY ./config/torrc /etc/tor/torrc
