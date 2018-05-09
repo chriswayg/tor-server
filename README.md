@@ -3,7 +3,9 @@
 [![](https://images.microbadger.com/badges/image/chriswayg/tor-server.svg)](https://microbadger.com/images/chriswayg/tor-server)
 
 ##### A complete, efficient and secure Tor relay server Docker image based on Debian Stretch
-*This docker image will update automatically each time the Debian Jessie base image is updated and build & install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
+*This docker image will update automatically each time the Debian Stretch base image is updated and install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
+
+It includes the latest Tor Debian package from torproject.org and obfs4proxy which are installed and configured according the Tor project recommendations.
 
 The Tor network relies on volunteers to donate bandwidth. The more people who run relays, the faster the Tor network will be. If you have at least 2 megabits/s for both upload and download, please help out Tor by configuring your Tor to be a relay too.
 
@@ -24,19 +26,18 @@ This will run a Tor relay server with defaults and a randomized Nickname:
 
 `docker run -d --init --name=tor_relay_1 -p 9001:9001 --restart=always chriswayg/tor-server`
 
-You should set a Nickname (only letters and numbers) and a Contact Email using environment variables:
+You can set your own Nickname (only letters and numbers) and your Contact-Email using environment variables:
 ```
 docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
 ### Tor configuration
-Configuration File Options: https://www.torproject.org/docs/tor-manual.html.en
+Tor manual with [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented /etc/torrc/torrc.default.
 
-For more detailed customisation edit `./torrc` on the host to the intended settings:
+For more detailed customisation copy `./torrc` to the host and edit to the desired settings:
 ```
 ### /etc/torrc ###
-# see /etc/torrc/torrc.default
 
 # Server's public IP Address (usually automatic)
 #Address 10.10.10.10
@@ -58,8 +59,9 @@ ExitPolicy reject *:*         # no exits allowed
 #MaxMemInQueues 512 MB        # Limit Memory usage to
 
 # Run Tor as obfuscated bridge
-#ServerTransportPlugin obfs3 exec /usr/bin/obfsproxy managed
-#ServerTransportListenAddr obfs3  0.0.0.0:54444
+#ServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+#ServerTransportListenAddr obfs4  0.0.0.0:54444
+#ExtORPort auto
 #BridgeRelay 1
 
 # Run Tor only as a server (no local applications)
@@ -69,15 +71,15 @@ SocksPort 0
 User debian-tor
 DataDirectory /var/lib/tor
 
-# If no Nickname or ContactInfo is set, docker-entrypoint will use
-# the environment variables to add Nickname/ContactInfo here
-#Nickname Tor4                 # only use letters and numbers
-#ContactInfo email@example.org
+## If no Nickname or ContactInfo is set, docker-entrypoint will use
+## the environment variables to add Nickname/ContactInfo here
+Nickname Tor4                 # only use letters and numbers
+ContactInfo email@example.org
 ```
 
 ### Run Tor with mounted `torrc`
 
-Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay:/var/lib/tor/keys/secret_id_key ./`) by mounting it, too, to continue with the same Fingerprint and ID.
+Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./`), to continue with the same Fingerprint and ID.
 ```
 docker run -d --init --name=tor_relay_1 -p 9001:9001 \
 -v $PWD/torrc:/etc/tor/torrc \
@@ -89,7 +91,7 @@ Check with ```docker logs tor_relay_1```. If you see the message ```[notice] Sel
 
 ### Run Tor using docker-compose.yml
 
-Adapt this example `docker-compose.yml` with your settings:
+Adapt this example `docker-compose.yml` with your settings or clone it from [Github](https://github.com/chriswayg/tor-server).
 ```
 version: '2.2'
 services:
@@ -109,9 +111,28 @@ services:
 Start a new instance of the Tor relay server, display the logs and show the current fingerprint:
 
 ```
+git clone https://github.com/chriswayg/tor-server.git
+cd tor-server
 docker-compose up -d
 docker-compose logs
 docker-compose docker-compose exec -T relay cat /var/lib/tor/fingerprint
+```
+
+### Run Tor Relay with IPv6
+
+The host system or VPS (for example Vultr) needs to have IPv6 activated. Additionally activate IPv6 for Docker by editing/creating the file `daemon.json` on the docker host and restarting Docker.
+
+- use the IPv6 subnet/64 address from your provider for `fixed-cidr-v6`
+
+```
+$ nano /etc/docker/daemon.json
+
+{
+"ipv6": true,
+"fixed-cidr-v6": "2100:1900:4400:4abc::/64"
+}
+
+systemctl restart docker
 ```
 
 ### License:
