@@ -115,7 +115,7 @@ git clone https://github.com/chriswayg/tor-server.git
 cd tor-server
 docker-compose up -d
 docker-compose logs
-docker-compose docker-compose exec -T relay cat /var/lib/tor/fingerprint
+docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ```
 
 ### Run Tor Relay with IPv6
