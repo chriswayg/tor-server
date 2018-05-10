@@ -22,7 +22,7 @@ state security.
 
 ### Quickstart
 
-- Prerequisites: A [linux server hosted at a Tor friendly ISP](https://trac.torproject.org/projects/tor/wiki/doc/GoodBadISPs) with Docker installed (see [Install Docker and Docker Compose](#install-docker-and-docker-compose) below)
+- Prerequisites: A [Linux server hosted at a Tor friendly ISP](https://trac.torproject.org/projects/tor/wiki/doc/GoodBadISPs) with Docker installed (see [Install Docker and Docker Compose](#install-docker-and-docker-compose) below)
 
 This command will run a Tor relay server with defaults and a randomized Nickname. The server will autostart after restarting the host system.
 
@@ -129,7 +129,7 @@ docker-compose exec relay bash
 
 ### Run Tor relay with IPv6
 
-The host system or VPS (for example Vultr) needs to have IPv6 activated. From your host server try to ping any IPv6 host: `ping6 -c 5 ipv6.google.com` Then find out your external IPv6 address:
+If your host supports IPv6, please enable it! The host system or VPS (for example Vultr) needs to have IPv6 activated. From your host server try to ping any IPv6 host: `ping6 -c 5 ipv6.google.com` Then find out your external IPv6 address:
 
 `dig +short -6 myip.opendns.com aaaa @resolver1.ipv6-sandbox.opendns.com`
 
@@ -165,26 +165,31 @@ docker-compose exec -T relay ping6 -c 5 ipv6.google.com
 
 You should see something like this in the log: `[notice] Opening OR listener on [2200:2400:4400:4a61:5400:4ff:f444:e448]:9001`
 
-- see also:
+- IPv6 Info for Tor and Docker:
+    - [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
     - [Walkthrough: Enabling IPv6 Functionality for Docker & Docker Compose](http://collabnix.com/enabling-ipv6-functionality-for-docker-and-docker-compose/)
     - [Docker, IPv6 and –net=”host”](http://www.debug-all.com/?p=163)
     - [Basic Configuration of Docker Engine with IPv6](http://www.debug-all.com/?p=128)
-    - [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
+
+---
 
 ### Install Docker and Docker Compose
 
 Quick installation for most operation systems (links how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/)):
 
-- Docker
+- Install Docker
+
 ```
 curl -sSL https://get.docker.com/ | CHANNEL=stable sh
-# After the installation process is finished, you may need to enable the service and make sure it is started (e.g. CentOS 7)
-systemctl status docker.service
-systemctl enable docker.service
-systemctl start docker.service
-```
+systemctl status docker
 
-- Docker-Compose
+systemctl enable docker
+systemctl start docker
+```
+After the installation process is finished, you may need to enable the service and make sure it is started (e.g. CentOS 7).
+
+- Install Docker-Compose
+
 ```
 curl -L https://github.com/docker/compose/releases/download/$(curl -Ls https://www.servercow.de/docker-compose/latest.php)/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
 chmod -v +x /usr/local/bin/docker-compose
