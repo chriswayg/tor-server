@@ -1,4 +1,4 @@
-### /etc/torrc ###
+### /etc/tor/torrc ###
 # see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
 
 # Server's public IP Address (usually automatic)

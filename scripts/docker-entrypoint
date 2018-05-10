@@ -10,7 +10,7 @@ chmodd() {
 
 echo -e "\n========================================================"
 # If DataDirectory, torrc or secret_id_key is mounted here,
-# ownership needs to be changed to the debian-tor user
+# ownership needs to be changed to the debian-tor user 
 chown -Rv debian-tor:debian-tor /var/lib/tor
 # fix permissions
 chmodd 700 /var/lib/tor
@@ -40,7 +40,7 @@ if [ ! -e /tor-config-done ]; then
             echo -e "\nContactInfo ${CONTACT_EMAIL}" >> /etc/tor/torrc
         fi
     fi
-    
+
 fi
 
 echo -e "\n========================================================"

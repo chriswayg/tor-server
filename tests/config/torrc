@@ -1,4 +1,4 @@
-### /etc/torrc ###
+### /etc/tor/torrc ###
 ## This configuration is used for testing within Travis
 
 # Server's public IP Address (usually automatic)

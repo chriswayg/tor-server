@@ -44,6 +44,7 @@ Look at the Tor manual with all [Configuration File Options](https://www.torproj
 
 For more detailed customisation copy `torrc` to the host and configure the desired settings:
 ```
+### /etc/tor/torrc ###
 # Port to advertise for incoming Tor connections.
 # common ports are 9001, 443
 ORPort 9001
@@ -199,7 +200,7 @@ docker-compose --version
 Please use the latest Docker engine available and do not use the engine that ships with your distros repository.
 
 ### License:
- - GPLv3 (c) 2018 Christian Wagner
+ - GPLv2 or later (c) 2018 Christian Wagner
 
 ### Guides
 
