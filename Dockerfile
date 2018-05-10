@@ -42,6 +42,7 @@ RUN apt-get update &&  \
 # Install tor and obfs4proxy & backup torrc
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y \
+    iputils-ping \
     tor \
     deb.torproject.org-keyring \
     obfs4proxy && \
