@@ -7,7 +7,7 @@ services:
     network_mode: host
     ports:
       - "9001:9001"
-      #- "9030:9030"
+      - "9030:9030"
       #- "54444:54444"
     environment:
       ## set your Nickname here (only use letters and numbers)
@@ -15,9 +15,8 @@ services:
       TOR_NICKNAME: Tor4
       ## an email address to contact you
       #CONTACT_EMAIL: tor4@example.org
-    #volumes:
+    volumes:
       ## mount custom `torrc` and/or identity keys here
-      ## use absolute paths on host, if docker-compose causes an error.
-      #- .tests/torrc:/etc/tor/torrc:ro
-      #- .tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key:ro
-      #- .tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/keys/secret_id_key:ro
+      - ./tests/torrc:/etc/tor/torrc
+      #- ./tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key
+      #- ./tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/keys/secret_id_key
