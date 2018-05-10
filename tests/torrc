@@ -13,9 +13,11 @@ ORPort 9001
 # common ports are 9030, 80
 DirPort 9030
 
-# Run as a relay only (not as an exit node)
+# Run as a relay only (change policy to enable exit node)
 ExitPolicy reject *:*         # no exits allowed
-ExitRelay 0
+ExitPolicy reject6 *:*
+ExitRelay 1
+IPv6Exit 1
 
 # Set limits
 RelayBandwidthRate 1024 KB   # Throttle traffic to
