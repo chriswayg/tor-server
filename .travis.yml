@@ -30,7 +30,7 @@ script:
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
-  - echo "### Mount customized `torrc` and the identity keys from a previous Tor relay server installation ###"
+  - echo "### Mount customized torrc and the identity keys from a previous Tor relay server installation ###"
   - docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -p 9030:9030 -v $PWD/tests/torrc:/etc/tor/torrc -v $PWD/tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key -v $PWD/tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/ed25519_master_id_secret_key --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
