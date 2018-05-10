@@ -1,5 +1,5 @@
 ### /etc/torrc ###
-# see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
+## This configuration is used for testing within Travis
 
 # Server's public IP Address (usually automatic)
 #Address 10.10.10.10
@@ -9,9 +9,9 @@
 ORPort 9001
 #ORPort [IPv6-address]:9001
 
-# Mirror directory information for others (optional)
+# Mirror directory information for others (optional, not used on bridge)
 # common ports are 9030, 80
-DirPort 9030
+#DirPort 9030
 
 # Run as a relay only (change policy to enable exit node)
 ExitPolicy reject *:*         # no exits allowed
