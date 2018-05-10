@@ -20,8 +20,9 @@ ExitRelay 1
 IPv6Exit 1
 
 # Set limits
-#RelayBandwidthRate 1024 KB   # Throttle traffic to
-#RelayBandwidthBurst 2048 KB  # But allow bursts up to
+#AccountingMax 999 GB
+#RelayBandwidthRate 512 KB   # Throttle traffic to
+#RelayBandwidthBurst 1024 KB  # But allow bursts up to
 #MaxMemInQueues 512 MB        # Limit Memory usage to
 
 # Run Tor as obfuscated bridge
