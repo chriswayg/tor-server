@@ -54,6 +54,9 @@ RUN apt-get update &&  \
 # Copy Tor configuration file
 COPY ./config/torrc /etc/tor/torrc
 
+# Debug
+RUN cat /etc/tor/torrc
+
 # Copy docker-entrypoint
 COPY ./scripts/ /usr/local/bin/
 
