@@ -6,9 +6,9 @@ services:
     restart: always
     network_mode: host
     ports:
-      - "9001:9001"
-      - "9030:9030"
-      #- "54444:54444"
+      - 9001:9001
+      - 9030:9030
+      #- 54444:54444
     environment:
       ## set your Nickname here (only use letters and numbers)
       # you can override this in `torrc`, if you mount it on the host
@@ -16,6 +16,6 @@ services:
       ## an email address to contact you
       #CONTACT_EMAIL: tor4@example.org
     volumes:
-      - ./data:/var/lib/tor:rw
+      - ./data/:/var/lib/tor/:rw
       # docker-compose still has problems with relative paths of files
       - /home/travis/build/chriswayg/tor-server/tests/torrc:/etc/tor/torrc:ro
