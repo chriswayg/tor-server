@@ -3,13 +3,16 @@
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
 
+# Environment setting only used during build
+ARG DEBIAN_FRONTEND=noninteractive
+
 # If no Nickname is set, a random string will be added to 'Tor4'
 ENV TOR_NICKNAME=Tor4 \
     TERM=xterm
 
 # Install prerequisites
 RUN apt-get update &&  \
-	DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
+	apt-get install --no-install-recommends --no-install-suggests -y \
       apt-transport-https \
       ca-certificates \
       dirmngr \
@@ -38,7 +41,7 @@ RUN apt-get update &&  \
   echo "deb http://deb.torproject.org/torproject.org obfs4proxy main" >> /etc/apt/sources.list.d/tor-apt-sources.list && \
 # Install tor and obfs4proxy & backup torrc
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --no-install-suggests -y \
+  apt-get install --no-install-recommends --no-install-suggests -y \
     tor \
     deb.torproject.org-keyring \
     obfs4proxy && \
