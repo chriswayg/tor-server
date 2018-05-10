@@ -111,7 +111,7 @@ services:
 
 - Configure the `docker-compose.yml` and optionally the `torrc` file, with your individual settings. Possibly install `git` first.
 ```
-git clone https://github.com/chriswayg/tor-server.git && cd tor-server
+cd /opt && git clone https://github.com/chriswayg/tor-server.git && cd tor-server
 nano docker-compose.yml
 ```
 
@@ -129,17 +129,11 @@ docker-compose exec relay bash
 
 ### Run Tor relay with IPv6
 
-The host system or VPS (for example Vultr) needs to have IPv6 activated. From your server try to ping any IPv6 host: `ping6 google.com`
+The host system or VPS (for example Vultr) needs to have IPv6 activated. From your host server try to ping any IPv6 host: `ping6 -c 5 ipv6.google.com` Then find out your external IPv6 address:
 
-If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration using the applicable IPv6 address:
+`dig +short -6 myip.opendns.com aaaa @resolver1.ipv6-sandbox.opendns.com`
 
-`ORPort [IPv6-address]:9001`
-
-Or use the included helper script to add the main IPv6 address of your host to your torrc, for example:
-
-`scripts/set-ipv6-in-torrc.sh tests/torrc`
-
-Additionally activate IPv6 for Docker by adding the following to the file `daemon.json` on the docker host and restarting Docker. My sample configurations use `network_mode: host` which makes it easier to use IPv6.
+If that works fine, activate IPv6 for Docker by adding the following to the file `daemon.json` on the docker host and restarting Docker.
 
 - use the IPv6 subnet/64 address from your provider for `fixed-cidr-v6`
 
@@ -148,11 +142,28 @@ nano /etc/docker/daemon.json
 
     {
     "ipv6": true,
-    "fixed-cidr-v6": "2100:1900:4400:4abc::/64"
+    "fixed-cidr-v6": "21ch:ange:this:addr::/64"
     }
 
 systemctl restart docker && systemctl status docker
 ```
+
+My sample Tor relay server configurations use `network_mode: host` which makes it easier to use IPv6. - Next make your Tor relay reachable via IPv6 by adding the applicable IPv6 address at the ORPort line in your `torrc` configuration:
+
+`ORPort [IPv6-address]:9001`
+
+Or use the included helper script to add the main IPv6 address of your host to your `torrc`, for example:
+
+`bash scripts/set-ipv6-in-torrc.sh config/torrc`
+
+- Restart the container and test, that the Tor relay can reach the outside world:
+```
+docker-compose restart
+docker-compose logs
+docker-compose exec -T relay ping6 -c 5 ipv6.google.com
+```
+
+You should see something like this in the log: `[notice] Opening OR listener on [2200:2400:4400:4a61:5400:4ff:f444:e448]:9001`
 
 - see also:
     - [Walkthrough: Enabling IPv6 Functionality for Docker & Docker Compose](http://collabnix.com/enabling-ipv6-functionality-for-docker-and-docker-compose/)
