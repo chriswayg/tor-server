@@ -1,0 +1,20 @@
+version: '2.2'
+services:
+  relay:
+    image: local-tor-server
+    init: true
+    restart: always
+    network_mode: host
+    ports:
+      - "9001:9001"
+      - "9030:9030"
+      #- "54444:54444"
+    environment:
+      ## set your Nickname here (only use letters and numbers)
+      # you can override this in `torrc`, if you mount it on the host
+      TOR_NICKNAME: Tor4
+      ## an email address to contact you
+      #CONTACT_EMAIL: tor4@example.org
+    volumes:
+      - ./data:/var/lib/tor:rw
+      - .torrc:/etc/tor/torrc:ro

@@ -39,6 +39,7 @@ script:
 
   # Also test docker-compose file (probably with the previous build on docker hub)
   - docker-compose --version
+  - cd tests
   - docker-compose up -d
   - sleep 60
   - docker-compose logs
