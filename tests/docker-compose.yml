@@ -1,3 +1,4 @@
+## This configuration is used for testing within Travis
 version: '2.2'
 services:
   relay:
@@ -12,4 +13,4 @@ services:
       TOR_NICKNAME: Tor4
     volumes:
       - ./data/:/var/lib/tor/
-      - ./torrc:/etc/tor/torrc
+      - ./config/torrc:/etc/tor/torrc

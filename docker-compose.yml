@@ -16,7 +16,9 @@ services:
       ## an email address to contact you
       #CONTACT_EMAIL: tor4@example.org
     volumes:
-      ## mount custom `torrc` and/or identity keys here
-      - ./tests/torrc:/etc/tor/torrc
+      ## mount custom `torrc` and DataDirectory here
+      - ./data/:/var/lib/tor/
+      - ./config/torrc:/etc/tor/torrc
+      ## alternatively mount previously saved identity keys here
       #- ./tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key
       #- ./tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/keys/secret_id_key
