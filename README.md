@@ -26,21 +26,21 @@ state security.
 
 This will run a Tor relay server with defaults and a randomized Nickname:
 
-`docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 --restart=always chriswayg/tor-server`
+`docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 --restart=always chriswayg/tor-server`
 
 You can set your own Nickname (only letters and numbers) and your Contact-Email (which will be published on the Tor network) using environment variables:
 ```
-docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 \
+docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
 
-Check with ```docker logs tor_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
+Check with ```docker logs tor-server_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
 
 ### Customize Tor configuration
 Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented `torrc.default`:
 
-`docker cp tor_relay_1:/etc/torrc/torrc.default ./`
+`docker cp tor-server_relay_1:/etc/torrc/torrc.default ./`
 
 For more detailed customisation copy `./torrc` to the host and configure the desired settings:
 ```
@@ -88,7 +88,7 @@ ContactInfo email@example.org
 
 Mount your customized `torrc` into the container. You can reuse the identity keys from a previous Tor relay server installation, to continue with the same Fingerprint and ID.
 ```
-docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -p 9030:9030 \
+docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 -p 9030:9030 \
 -v $PWD/torrc:/etc/tor/torrc \
 -v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key -v $PWD/ed25519_master_id_secret_key:/var/lib/tor/ed25519_master_id_secret_key \
 --restart=always chriswayg/tor-server
@@ -99,8 +99,8 @@ docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -p 9030:9030 \
 When upgrading your Tor relay, or moving it on a different computer, the important part is to keep the same identity keys. Keeping backups of the identity keys so you can restore a relay in the future is the recommended way to ensure the reputation of the relay won't be wasted.
 
 ```
-docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./
-docker cp tor_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./
+docker cp tor-server_relay_1:/var/lib/tor/keys/secret_id_key ./
+docker cp tor-server_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./
 ```
 
 ### Run Tor using docker-compose
@@ -129,11 +129,14 @@ git clone https://github.com/chriswayg/tor-server.git && cd tor-server
 nano docker-compose.yml
 ```
 
-- Start a new instance of the Tor relay server, display the logs and show the current fingerprint.
+- Start a new instance of the Tor relay server and display the logs.
 ```
 docker-compose up -d
 docker-compose logs -f
+```
 
+- As an example for running commands in the container, show the current fingerprint.
+```
 docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ```
 
