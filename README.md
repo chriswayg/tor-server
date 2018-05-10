@@ -24,18 +24,23 @@ state security.
 
 This will run a Tor relay server with defaults and a randomized Nickname:
 
-`docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 --restart=always chriswayg/tor-server`
+`docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 --restart=always chriswayg/tor-server`
 
 You can set your own Nickname (only letters and numbers) and your Contact-Email (which will be published on the Tor network) using environment variables:
 ```
-docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 \
+docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
-### Tor configuration
-Tor manual with [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented /etc/torrc/torrc.default.
 
-For more detailed customisation copy `./torrc` to the host and edit to the desired settings:
+Check with ```docker logs tor_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
+
+### Customize Tor configuration
+Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented `torrc.default`:
+
+`docker cp tor_relay_1:/etc/torrc/torrc.default ./`
+
+For more detailed customisation copy `./torrc` to the host and configure the desired settings:
 ```
 ### /etc/torrc ###
 
@@ -77,19 +82,26 @@ Nickname Tor4                 # only use letters and numbers
 ContactInfo email@example.org
 ```
 
-### Run Tor with mounted `torrc`
+#### Run Tor with mounted `torrc`
 
-Mount your customized `torrc` into the container. You can reuse the `secret_id_key` from a previous Tor server installation (`docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./`), to continue with the same Fingerprint and ID.
+Mount your customized `torrc` into the container. You can reuse the identity keys from a previous Tor relay server installation, to continue with the same Fingerprint and ID.
 ```
-docker run -d --init --name=tor_relay_1 --net="host" -p 9001:9001 -p 9030:9030 \
+docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -p 9030:9030 \
 -v $PWD/torrc:/etc/tor/torrc \
--v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key \
+-v $PWD/secret_id_key:/var/lib/tor/keys/secret_id_key -v $PWD/ed25519_master_id_secret_key:/var/lib/tor/ed25519_master_id_secret_key \
 --restart=always chriswayg/tor-server
 ```
 
-Check with ```docker logs tor_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
+### Move or upgrade the Tor relay
 
-### Run Tor using docker-compose.yml
+When upgrading your Tor relay, or moving it on a different computer, the important part is to keep the same identity keys. Keeping backups of the identity keys so you can restore a relay in the future is the recommended way to ensure the reputation of the relay won't be wasted.
+
+```
+docker cp tor_relay_1:/var/lib/tor/keys/secret_id_key ./
+docker cp tor_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./
+```
+
+### Run Tor using docker-compose
 
 Adapt this example `docker-compose.yml` with your settings or clone it from [Github](https://github.com/chriswayg/tor-server).
 ```
@@ -107,18 +119,23 @@ services:
       CONTACT_EMAIL: tor4@example.org
 ```
 
-##### Start the Tor server
-Start a new instance of the Tor relay server, display the logs and show the current fingerprint:
+##### Configure and run the Tor relay server
 
+- Configure the `docker-compose.yml` and optionally the `torrc` file, with your individual settings.
 ```
 git clone https://github.com/chriswayg/tor-server.git
 cd tor-server
+nano docker-compose.yml
+```
+
+- Start a new instance of the Tor relay server, display the logs and show the current fingerprint.
+```
 docker-compose up -d
 docker-compose logs
 docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ```
 
-### Run Tor Relay with IPv6
+### Run Tor relay with IPv6
 
 The host system or VPS (for example Vultr) needs to have IPv6 activated. From your server try to ping any IPv6 host: `ping6 google.com`
 
