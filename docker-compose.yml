@@ -16,7 +16,8 @@ services:
       ## an email address to contact you
       #CONTACT_EMAIL: tor4@example.org
     #volumes:
-      ## mount custom `torrc` and/or `secret_id_key` here
-      # use absolute paths on host, for example:
-      #- /opt/tor-server/torrc:/etc/tor/torrc
-      #- /opt/tor-server/secret_id_key:/var/lib/tor/keys/secret_id_key
+      ## mount custom `torrc` and/or identity keys here
+      ## use absolute paths on host, if docker-compose causes an error.
+      #- .tests/torrc:/etc/tor/torrc:ro
+      #- .tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key:ro
+      #- .tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/keys/secret_id_key:ro
