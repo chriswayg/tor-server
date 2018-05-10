@@ -40,7 +40,7 @@ if [ ! -e /tor-config-done ]; then
             echo -e "\nContactInfo ${CONTACT_EMAIL}" >> /etc/tor/torrc
         fi
     fi
-
+    
 fi
 
 echo -e "\n========================================================"
