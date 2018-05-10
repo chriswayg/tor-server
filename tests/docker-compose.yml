@@ -17,4 +17,4 @@ services:
       #CONTACT_EMAIL: tor4@example.org
     volumes:
       - ./data/:/var/lib/tor/
-      - .torrc:/etc/tor/torrc
+      - ./torrc:/etc/tor/torrc
