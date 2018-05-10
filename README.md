@@ -22,6 +22,8 @@ state security.
 
 ### Quickstart
 
+- Prerequisites: A [linux server hosted at a Tor friendly ISP](https://trac.torproject.org/projects/tor/wiki/doc/GoodBadISPs) with Docker installed (see [Install Docker and Docker Compose](#install-docker-and-docker-compose) below)
+
 This will run a Tor relay server with defaults and a randomized Nickname:
 
 `docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 --restart=always chriswayg/tor-server`
@@ -121,17 +123,17 @@ services:
 
 ##### Configure and run the Tor relay server
 
-- Configure the `docker-compose.yml` and optionally the `torrc` file, with your individual settings.
+- Configure the `docker-compose.yml` and optionally the `torrc` file, with your individual settings. Possibly install `git` first.
 ```
-git clone https://github.com/chriswayg/tor-server.git
-cd tor-server
+git clone https://github.com/chriswayg/tor-server.git && cd tor-server
 nano docker-compose.yml
 ```
 
 - Start a new instance of the Tor relay server, display the logs and show the current fingerprint.
 ```
 docker-compose up -d
-docker-compose logs
+docker-compose logs -f
+
 docker-compose exec -T relay cat /var/lib/tor/fingerprint
 ```
 
@@ -157,6 +159,30 @@ $ nano /etc/docker/daemon.json
 
 $ systemctl restart docker
 ```
+
+### Install Docker and Docker Compose
+
+**1\.** Learn how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+Quick installation for most operation systems:
+
+- Docker
+```
+curl -sSL https://get.docker.com/ | CHANNEL=stable sh
+# After the installation process is finished, you may need to enable the service and make sure it is started (e.g. CentOS 7)
+systemctl status docker.service
+systemctl enable docker.service
+systemctl start docker.service
+```
+
+- Docker-Compose
+```
+curl -L https://github.com/docker/compose/releases/download/$(curl -Ls https://www.servercow.de/docker-compose/latest.php)/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
+chmod -v +x /usr/local/bin/docker-compose
+docker-compose --version
+```
+
+Please use the latest Docker engine available and do not use the engine that ships with your distros repository.
 
 ### License:
  - GPLv3 (c) 2018 Christian Wagner
