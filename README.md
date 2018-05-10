@@ -42,37 +42,20 @@ Look at the Tor manual with all [Configuration File Options](https://www.torproj
 
 `docker cp tor-server_relay_1:/etc/torrc/torrc.default ./`
 
-For more detailed customisation copy `./torrc` to the host and configure the desired settings:
+For more detailed customisation copy `torrc` to the host and configure the desired settings:
 ```
-### /etc/torrc ###
-
-# Server's public IP Address (usually automatic)
-#Address 10.10.10.10
-
 # Port to advertise for incoming Tor connections.
 # common ports are 9001, 443
 ORPort 9001
+#ORPort [IPv6-address]:9001
 
-# Mirror directory information for others (optional)
-# common ports are 9030, 80
-#DirPort 9030
-
-# Run as a relay only (not as an exit node)
+# Run as a relay only (change policy to enable exit node)
 ExitPolicy reject *:*         # no exits allowed
-
-# Set limits
-#RelayBandwidthRate 1024 KB   # Throttle traffic to
-#RelayBandwidthBurst 2048 KB  # But allow bursts up to
-#MaxMemInQueues 512 MB        # Limit Memory usage to
-
-# Run Tor as obfuscated bridge
-#ServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy
-#ServerTransportListenAddr obfs4  0.0.0.0:54444
-#ExtORPort auto
-#BridgeRelay 1
+ExitPolicy reject6 *:*
 
 # Run Tor only as a server (no local applications)
 SocksPort 0
+ControlSocket 0
 
 # Run Tor as a regular user (do not change this)
 User debian-tor
@@ -81,7 +64,7 @@ DataDirectory /var/lib/tor
 ## If no Nickname or ContactInfo is set, docker-entrypoint will use
 ## the environment variables to add Nickname/ContactInfo here
 Nickname Tor4                 # only use letters and numbers
-ContactInfo email@example.org
+ContactInfo tor4tests@example.org
 ```
 
 #### Run Tor with mounted `torrc`
@@ -135,20 +118,21 @@ docker-compose up -d
 docker-compose logs -f
 ```
 
-- As an example for running commands in the container, show the current fingerprint.
+- As examples for running commands in the container, show the current fingerprint or enter a bash shell.
 ```
 docker-compose exec -T relay cat /var/lib/tor/fingerprint
+docker-compose exec relay bash
 ```
 
 ### Run Tor relay with IPv6
 
 The host system or VPS (for example Vultr) needs to have IPv6 activated. From your server try to ping any IPv6 host: `ping6 google.com`
 
-If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration (example for ORPort 9001):
+If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration:
 
 `ORPort [IPv6-address]:9001`
 
-Additionally activate IPv6 for Docker by editing/creating the file `daemon.json` on the docker host and restarting Docker.
+Additionally activate IPv6 for Docker by adding the following to the file `daemon.json` on the docker host and restarting Docker.
 
 - use the IPv6 subnet/64 address from your provider for `fixed-cidr-v6`
 
@@ -160,9 +144,9 @@ $ nano /etc/docker/daemon.json
 "fixed-cidr-v6": "2100:1900:4400:4abc::/64"
 }
 
-$ systemctl restart docker
+$ systemctl restart docker && systemctl status docker
 ```
-
+- see also: [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
 ### Install Docker and Docker Compose
 
 **1\.** Learn how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
