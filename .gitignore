@@ -9,4 +9,5 @@ ehthumbs.db
 Thumbs.db
 
 # Private files
-/production/
+production/
+config/torrc.default
