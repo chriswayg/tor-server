@@ -128,25 +128,34 @@ docker-compose exec relay bash
 
 The host system or VPS (for example Vultr) needs to have IPv6 activated. From your server try to ping any IPv6 host: `ping6 google.com`
 
-If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration:
+If that worked fine, make your Tor relay reachable via IPv6 by adding an additional ORPort line to your `torrc` configuration using the applicable IPv6 address:
 
 `ORPort [IPv6-address]:9001`
 
-Additionally activate IPv6 for Docker by adding the following to the file `daemon.json` on the docker host and restarting Docker.
+Or use the included helper script to add the main IPv6 address of your host to your torrc, for example:
+
+`scripts/set-ipv6-in-torrc.sh tests/torrc`
+
+Additionally activate IPv6 for Docker by adding the following to the file `daemon.json` on the docker host and restarting Docker. My sample configurations use `network_mode: host` which makes it easier to use IPv6.
 
 - use the IPv6 subnet/64 address from your provider for `fixed-cidr-v6`
 
 ```
-$ nano /etc/docker/daemon.json
+nano /etc/docker/daemon.json
 
-{
-"ipv6": true,
-"fixed-cidr-v6": "2100:1900:4400:4abc::/64"
-}
+    {
+    "ipv6": true,
+    "fixed-cidr-v6": "2100:1900:4400:4abc::/64"
+    }
 
-$ systemctl restart docker && systemctl status docker
+systemctl restart docker && systemctl status docker
 ```
-- see also: [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
+
+- see also:
+    - [Walkthrough: Enabling IPv6 Functionality for Docker & Docker Compose](http://collabnix.com/enabling-ipv6-functionality-for-docker-and-docker-compose/)
+    - [Docker, IPv6 and –net=”host”](http://www.debug-all.com/?p=163)
+    - [Basic Configuration of Docker Engine with IPv6](http://www.debug-all.com/?p=128)
+    - [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
 ### Install Docker and Docker Compose
 
 **1\.** Learn how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
