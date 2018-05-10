@@ -35,7 +35,7 @@ docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 \
 --restart=always chriswayg/tor-server
 ```
 
-Check with ```docker logs -f tor-server_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
+Check with ```docker logs -f tor-server_relay_1```  If you see the message: ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
 
 ### Customize Tor configuration
 Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented `torrc.default`:
@@ -82,13 +82,14 @@ docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 -p 9030:9
 When upgrading your Tor relay, or moving it on a different computer, the important part is to keep the same identity keys. Keeping backups of the identity keys so you can restore a relay in the future is the recommended way to ensure the reputation of the relay won't be wasted.
 
 ```
-docker cp tor-server_relay_1:/var/lib/tor/keys/secret_id_key ./
-docker cp tor-server_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./
+mkdir -vp data/keys/
+docker cp tor-server_relay_1:/var/lib/tor/keys/secret_id_key ./data/keys/
+docker cp tor-server_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./data/keys/
 ```
 
 ### Run Tor using docker-compose (recommended)
 
-Adapt this example `docker-compose.yml` with your settings or clone it from [Github](https://github.com/chriswayg/tor-server).
+Adapt the example `docker-compose.yml` with your settings or clone it from [Github](https://github.com/chriswayg/tor-server).
 ```
 version: '2.2'
 services:
@@ -96,11 +97,13 @@ services:
     image: chriswayg/tor-server
     init: true
     restart: always
+    network_mode: host
     ports:
       - "9001:9001"
+      - "9030:9030"
     environment:
-      ## set your Nickname here (only use letters and numbers)
-      TOR_NICKNAME: Tor4docker
+      ## set your Nickname here (only use letters and numbers) and an Email
+      TOR_NICKNAME: Tor4
       CONTACT_EMAIL: tor4@example.org
 ```
 
@@ -156,11 +159,10 @@ systemctl restart docker && systemctl status docker
     - [Docker, IPv6 and –net=”host”](http://www.debug-all.com/?p=163)
     - [Basic Configuration of Docker Engine with IPv6](http://www.debug-all.com/?p=128)
     - [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
+
 ### Install Docker and Docker Compose
 
-**1\.** Learn how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
-
-Quick installation for most operation systems:
+Quick installation for most operation systems (links how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/)):
 
 - Docker
 ```
