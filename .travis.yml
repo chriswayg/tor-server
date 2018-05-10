@@ -13,14 +13,14 @@ script:
 
   ## Test running the container with commands from the Readme
 
-  # run a Tor relay server with defaults and a randomized Nickname
+  - echo "### Run a Tor relay server with defaults and a randomized Nickname ###"
   - docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
- # run a Tor relay server with a set Nickname and a Contact-Email
+  - echo "### Run a Tor relay server with a set Nickname and a Contact-Email ###"
   - docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
@@ -30,14 +30,14 @@ script:
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
-  # Mount customized `torrc` into the container and the identity keys from a previous Tor relay server installation
+  - echo "### Mount customized `torrc` and the identity keys from a previous Tor relay server installation ###"
   - docker run -d --init --name=tor_relay_1 --net=host -p 9001:9001 -p 9030:9030 -v $PWD/tests/torrc:/etc/tor/torrc -v $PWD/tests/data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key -v $PWD/tests/data/keys/ed25519_master_id_secret_key:/var/lib/tor/ed25519_master_id_secret_key --restart=always local-tor-server
   - sleep 30
   - docker logs tor_relay_1
   - docker stop tor_relay_1
   - docker rm tor_relay_1
 
-  # Also test docker-compose file (probably with the previous build on docker hub)
+  - echo "Run a Tor relay server with docker-compose with locally built image"
   - docker-compose --version
   - cd tests
   - docker-compose up -d

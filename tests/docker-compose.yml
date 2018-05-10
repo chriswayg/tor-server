@@ -17,4 +17,5 @@ services:
       #CONTACT_EMAIL: tor4@example.org
     volumes:
       - ./data:/var/lib/tor:rw
+      # docker-compose still has problems with relative paths of files
       - /home/travis/build/chriswayg/tor-server/tests/torrc:/etc/tor/torrc:ro
