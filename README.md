@@ -24,23 +24,23 @@ state security.
 
 - Prerequisites: A [linux server hosted at a Tor friendly ISP](https://trac.torproject.org/projects/tor/wiki/doc/GoodBadISPs) with Docker installed (see [Install Docker and Docker Compose](#install-docker-and-docker-compose) below)
 
-This will run a Tor relay server with defaults and a randomized Nickname:
+This command will run a Tor relay server with defaults and a randomized Nickname. The server will autostart after restarting the host system.
 
 `docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 --restart=always chriswayg/tor-server`
 
-You can set your own Nickname (only letters and numbers) and your Contact-Email (which will be published on the Tor network) using environment variables:
+You can set your own Nickname (only letters and numbers) and an optional Contact-Email (which will be published on the Tor network) using environment variables:
 ```
 docker run -d --init --name=tor-server_relay_1 --net=host -p 9001:9001 \
 -e TOR_NICKNAME=Tor4docker -e CONTACT_EMAIL=tor4@example.org \
 --restart=always chriswayg/tor-server
 ```
 
-Check with ```docker logs tor-server_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
+Check with ```docker logs -f tor-server_relay_1```. If you see the message ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after quite a while, your server started successfully.
 
 ### Customize Tor configuration
 Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to the current fully commented `torrc.default`:
 
-`docker cp tor-server_relay_1:/etc/torrc/torrc.default ./`
+`docker cp tor-server_relay_1:/etc/tor/torrc.default ./`
 
 For more detailed customisation copy `torrc` to the host and configure the desired settings:
 ```
@@ -86,7 +86,7 @@ docker cp tor-server_relay_1:/var/lib/tor/keys/secret_id_key ./
 docker cp tor-server_relay_1:/var/lib/tor/keys/ed25519_master_id_secret_key ./
 ```
 
-### Run Tor using docker-compose
+### Run Tor using docker-compose (recommended)
 
 Adapt this example `docker-compose.yml` with your settings or clone it from [Github](https://github.com/chriswayg/tor-server).
 ```
