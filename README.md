@@ -167,10 +167,12 @@ docker-compose exec -T relay ping6 -c 5 ipv6.google.com
 You should see something like this in the log: `[notice] Opening OR listener on [2200:2400:4400:4a61:5400:4ff:f444:e448]:9001`
 
 - IPv6 Info for Tor and Docker:
-    - [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
-    - [Walkthrough: Enabling IPv6 Functionality for Docker & Docker Compose](http://collabnix.com/enabling-ipv6-functionality-for-docker-and-docker-compose/)
-    - [Docker, IPv6 and –net=”host”](http://www.debug-all.com/?p=163)
-    - [Basic Configuration of Docker Engine with IPv6](http://www.debug-all.com/?p=128)
+    1. [A Tor relay operators IPv6 HOWTO](https://trac.torproject.org/projects/tor/wiki/doc/IPv6RelayHowto)
+    2. [Walkthrough: Enabling IPv6 Functionality for Docker & Docker Compose](http://collabnix.com/enabling-ipv6-functionality-for-docker-and-docker-compose/)
+    3. [Basic Configuration of Docker Engine with IPv6](http://www.debug-all.com/?p=128)
+    4. [Docker, IPv6 and –net=”host”](http://www.debug-all.com/?p=163)
+    5. [Docker Networking 101 – Host mode](http://www.dasblinkenlichten.com/docker-networking-101-host-mode/)
+    5. When using the host network driver for a container, that container’s network stack is not isolated from the Docker host. If you run a container which binds to port 9001 and you use host networking, the container’s application will be available on port 9001 on the host’s IP address.
 
 ---
 
