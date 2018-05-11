@@ -10,7 +10,7 @@ chmodd() {
 
 echo -e "\n========================================================"
 # If DataDirectory, torrc or secret_id_key is mounted here,
-# ownership needs to be changed to the debian-tor user 
+# ownership needs to be changed to the debian-tor user
 chown -Rv debian-tor:debian-tor /var/lib/tor
 # fix permissions
 chmodd 700 /var/lib/tor
@@ -19,7 +19,7 @@ chmodf 600 /var/lib/tor
 if [ ! -e /tor-config-done ]; then
     touch /tor-config-done   # only run this once
 
-    # Add a Nickname, if none has been set in torrc
+    # Add Nickname from env variable or ransomized, if none has been set in torrc
     if ! grep -q '^Nickname ' /etc/tor/torrc; then
         if [ ${TOR_NICKNAME} == "Tor4" ]; then
             # if user did not change the default Nickname, genetrate a random pronounceable one
@@ -32,7 +32,7 @@ if [ ! -e /tor-config-done ]; then
         echo -e "\nNickname ${TOR_NICKNAME}" >> /etc/tor/torrc
     fi
 
-    # Add ContactInfo from env variable, if none has been set in torrc
+    # Add Contact_Email from env variable, if none has been set in torrc
     if ! grep -q '^ContactInfo ' /etc/tor/torrc; then
         # if CONTACT_EMAIL is not null
         if [ -n "${CONTACT_EMAIL}" ]; then
@@ -40,7 +40,6 @@ if [ ! -e /tor-config-done ]; then
             echo -e "\nContactInfo ${CONTACT_EMAIL}" >> /etc/tor/torrc
         fi
     fi
-
 fi
 
 echo -e "\n========================================================"
