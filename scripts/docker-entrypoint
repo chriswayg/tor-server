@@ -1,17 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 set -o errexit
 
-chmodf() {
-        find $2 -type f -exec chmod -v $1 {} \;
+chmodf() { find $2 -type f -exec chmod -v $1 {} \;
 }
-chmodd() {
-        find $2 -type d -exec chmod -v $1 {} \;
+chmodd() { find $2 -type d -exec chmod -v $1 {} \;
 }
 
 echo -e "\n========================================================"
-# If DataDirectory, torrc or secret_id_key is mounted here,
-# ownership needs to be changed to the debian-tor user
-chown -Rv debian-tor:debian-tor /var/lib/tor
+# If DataDirectory, identity keys or torrc is mounted here,
+# ownership needs to be changed to the TOR_USER user
+chown -Rv ${TOR_USER}:${TOR_USER} /var/lib/tor
 # fix permissions
 chmodd 700 /var/lib/tor
 chmodf 600 /var/lib/tor
@@ -23,7 +21,7 @@ if [ ! -e /tor-config-done ]; then
     if ! grep -q '^Nickname ' /etc/tor/torrc; then
         if [ ${TOR_NICKNAME} == "Tor4" ]; then
             # if user did not change the default Nickname, genetrate a random pronounceable one
-            RPW=$(pwgen -0A 10)
+            RPW=$(pwgen -0A 8)
             TOR_NICKNAME=${TOR_NICKNAME}${RPW}
             echo "Setting random Nickname: ${TOR_NICKNAME}"
         else
@@ -43,7 +41,8 @@ if [ ! -e /tor-config-done ]; then
 fi
 
 echo -e "\n========================================================"
-# display Tor version & torrc in log
+# Display Tor version, os-version & torrc in log
+cat /etc/os-release
 tor --version
 cat /etc/tor/torrc
 echo -e "========================================================\n"
