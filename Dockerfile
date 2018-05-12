@@ -1,5 +1,5 @@
 # Dockerfile for Tor Relay Server with obfs4proxy
-#
+
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
 
@@ -7,7 +7,8 @@ MAINTAINER Christian chriswayg@gmail.com
 ARG DEBIAN_FRONTEND=noninteractive
 
 # If no Nickname is set, a random string will be added to 'Tor4'
-ENV TOR_NICKNAME=Tor4 \
+ENV TOR_USER=debian-tor \
+    TOR_NICKNAME=Tor4 \
     TERM=xterm
 
 # Install prerequisites
@@ -47,19 +48,23 @@ RUN apt-get update &&  \
     deb.torproject.org-keyring \
     obfs4proxy && \
   mv -v /etc/tor/torrc /etc/tor/torrc.default && \
+  obfs4proxy -version && \
   # Download GeoIP files
-  cd /etc/tor && \
+  cd /usr/share && \
   apt-get -d source tor && \
   tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip && \
   tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip6 && \
   rm -v tor_* && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy Tor configuration file
-COPY ./config/torrc /etc/tor/torrc
 
-# Debug
-RUN cat /etc/tor/torrc
+
+# Debian creates an unprivileged tor user
+# debian-tor
+
+
+# Copy Tor configuration file
+COPY ./torrc /etc/tor/torrc
 
 # Copy docker-entrypoint
 COPY ./scripts/ /usr/local/bin/
@@ -67,8 +72,8 @@ COPY ./scripts/ /usr/local/bin/
 # Persist data
 VOLUME /etc/tor /var/lib/tor
 
-# ORPort, DirPort, ObfsproxyPort
-EXPOSE 9001 9030 54444
+# ORPort, DirPort, SocksPort, ObfsproxyPort, MeekPort
+EXPOSE 9001 9030 9050 54444 7002
 
 ENTRYPOINT ["docker-entrypoint"]
 
