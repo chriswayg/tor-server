@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -o errexit
 
 chmodf() { find $2 -type f -exec chmod -v $1 {} \;
