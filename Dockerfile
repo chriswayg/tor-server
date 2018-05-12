@@ -58,7 +58,7 @@ RUN apt-get update &&  \
     && mv -v /tmp/go/bin/meek-server /usr/local/bin/ \
     && rm -rf /tmp/go && \
   # Download GeoIP files
-  cd /usr/share && \
+  cd /usr/share/tor && \
   apt-get -d source tor && \
   tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip && \
   tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip6 && \
