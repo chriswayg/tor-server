@@ -14,6 +14,8 @@ ENV TOR_USER=debian-tor \
 # Install prerequisites
 RUN apt-get update &&  \
 	apt-get install --no-install-recommends --no-install-suggests -y \
+      go \
+      git \
       apt-transport-https \
       ca-certificates \
       dirmngr \
@@ -45,10 +47,17 @@ RUN apt-get update &&  \
   apt-get install --no-install-recommends --no-install-suggests -y \
     iputils-ping \
     tor \
-    deb.torproject.org-keyring \
-    obfs4proxy && \
-  mv -v /etc/tor/torrc /etc/tor/torrc.default && \
-  obfs4proxy -version && \
+    deb.torproject.org-keyring && \
+  mv -v /etc/tor/torrc /etc/tor/torrc.default \
+    # Install obfs4proxy & meek-server
+    && export GOPATH="/tmp/go" \
+    && go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
+    && mv -v /tmp/go/bin/obfs4proxy /usr/local/bin/ \
+    && rm -rf /tmp/go \
+    && obfs4proxy -version \
+    && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
+    && mv -v /tmp/go/bin/meek-server /usr/local/bin/ \
+    && rm -rf /tmp/go && \
   # Download GeoIP files
   cd /usr/share && \
   apt-get -d source tor && \
@@ -57,11 +66,7 @@ RUN apt-get update &&  \
   rm -v tor_* && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-
-# Debian creates an unprivileged tor user
-# debian-tor
-
+# Debian creates an unprivileged tor user: debian-tor
 
 # Copy Tor configuration file
 COPY ./torrc /etc/tor/torrc
