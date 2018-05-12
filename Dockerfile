@@ -14,7 +14,7 @@ ENV TOR_USER=debian-tor \
 # Install prerequisites
 RUN apt-get update &&  \
 	apt-get install --no-install-recommends --no-install-suggests -y \
-      go \
+      golang \
       git \
       apt-transport-https \
       ca-certificates \
