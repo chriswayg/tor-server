@@ -6,11 +6,16 @@ services:
     init: true
     restart: always
     network_mode: host
-    ports:
-      - 9001:9001
-      - 9030:9030
-    environment:
-      TOR_NICKNAME: Tor4
+    ## the ports are not needed with network_mode host
+    #ports:
+      #- "9001:9001"
+      #- "9030:9030"
+      #- "54444:54444"
+      #- "7002:7002"
     volumes:
-      - ./data/:/var/lib/tor/
+      ## mount and DataDirectory and custom `torrc` here
+      - ./tor-data/:/var/lib/tor/
       - ./torrc:/etc/tor/torrc
+      ## alternatively mount previously saved identity keys here
+      #- ./tests/tor-data/keys/secret_id_key:/var/lib/tor/keys/secret_id_key
+      #- ./tests/tor-data/keys/ed25519_master_id_secret_key:/var/lib/tor/keys/secret_id_key
