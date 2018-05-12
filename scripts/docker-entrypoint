@@ -17,12 +17,12 @@ chmodf 600 /var/lib/tor
 if [ ! -e /tor-config-done ]; then
     touch /tor-config-done   # only run this once
 
-    # Add Nickname from env variable or ransomized, if none has been set in torrc
+    # Add Nickname from env variable or randomized, if none has been set
     if ! grep -q '^Nickname ' /etc/tor/torrc; then
-        if [ ${TOR_NICKNAME} == "Tor4" ]; then
+        if [ ${TOR_NICKNAME} == "Tor4" ] || [ -z "${TOR_NICKNAME}" ]; then
             # if user did not change the default Nickname, genetrate a random pronounceable one
             RPW=$(pwgen -0A 8)
-            TOR_NICKNAME=${TOR_NICKNAME}${RPW}
+            TOR_NICKNAME="Tor4${RPW}"
             echo "Setting random Nickname: ${TOR_NICKNAME}"
         else
             echo "Setting chosen Nickname: ${TOR_NICKNAME}"
@@ -44,6 +44,7 @@ echo -e "\n========================================================"
 # Display OS version, Tor version & torrc in log
 echo -e "Debian Version: \c" && cat /etc/debian_version
 tor --version
+obfs4proxy -version
 cat /etc/tor/torrc
 echo -e "========================================================\n"
 
