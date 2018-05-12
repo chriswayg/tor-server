@@ -41,8 +41,8 @@ if [ ! -e /tor-config-done ]; then
 fi
 
 echo -e "\n========================================================"
-# Display Tor version, os-version & torrc in log
-cat /etc/os-release
+# Display OS version, Tor version & torrc in log
+echo -e "Debian Version: \c" && cat /etc/debian_version
 tor --version
 cat /etc/tor/torrc
 echo -e "========================================================\n"
