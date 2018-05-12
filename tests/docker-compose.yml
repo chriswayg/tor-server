@@ -13,4 +13,4 @@ services:
       TOR_NICKNAME: Tor4
     volumes:
       - ./data/:/var/lib/tor/
-      - ./config/torrc:/etc/tor/torrc
+      - ./torrc:/etc/tor/torrc
