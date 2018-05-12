@@ -33,7 +33,7 @@ MaxMemInQueues 512 MB       # Limit Memory usage to
 
 ## Run Tor as obfuscated bridge
 # https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy
-ServerTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+ServerTransportPlugin obfs4 exec /usr/local/bin/obfs4proxy
 ServerTransportListenAddr obfs4  0.0.0.0:54444
 ExtORPort auto
 BridgeRelay 1
