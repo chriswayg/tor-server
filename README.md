@@ -205,6 +205,7 @@ Please use the latest Docker engine available and do not use the engine that shi
 
 - [Tor Relay Guide](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide)
 - [Tor on Debian Installation Instructions](https://www.torproject.org/docs/debian.html.en)
+- [Torproject - git repo](https://github.com/torproject/tor)
 - [obfs4proxy on Debian - Guide to run an obfuscated bridge to help censored users connect to the Tor network.](https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy)
 - [obfs4 - The obfourscator - Github](https://github.com/Yawning/obfs4)
 - [How to use the “meek” pluggable transport](https://blog.torproject.org/how-use-meek-pluggable-transport)
