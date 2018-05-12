@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-# usage: scripts/set-ipv6-in-torrc.sh /host-path/to/torrc
+# usage: ./set-ipv6-in-torrc.sh ./torrc
 
 if [ $# -eq 1 ]; then
    # Check if the input file actually exists.
