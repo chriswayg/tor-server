@@ -99,13 +99,10 @@ services:
     init: true
     restart: always
     network_mode: host
-    ports:
-      - "9001:9001"
-      - "9030:9030"
-    environment:
-      ## set your Nickname here (only use letters and numbers) and an Email
-      TOR_NICKNAME: Tor4
-      CONTACT_EMAIL: tor4@example.org
+    volumes:
+      ## mount custom `torrc` and DataDirectory here
+      - ./torrc:/etc/tor/torrc
+      - ./data/:/var/lib/tor/
 ```
 
 ##### Configure and run the Tor relay server
@@ -202,13 +199,16 @@ docker-compose --version
 Please use the latest Docker engine available and do not use the engine that ships with your distros repository.
 
 ### License:
- - GPLv2 or later (c) 2018 Christian Wagner
+ - MIT
 
 ### Guides
 
 - [Tor Relay Guide](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide)
 - [Tor on Debian Installation Instructions](https://www.torproject.org/docs/debian.html.en)
 - [obfs4proxy on Debian - Guide to run an obfuscated bridge to help censored users connect to the Tor network.](https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy)
-
+- [obfs4 - The obfourscator - Github](https://github.com/Yawning/obfs4)
+- [How to use the “meek” pluggable transport](https://blog.torproject.org/how-use-meek-pluggable-transport)
+- [meek-server for Tor meek bridge](https://github.com/arlolra/meek/tree/master/meek-server)
+- Originally based on: https://github.com/vimagick/dockerfiles/tree/master/tor
 
 [1]: https://www.torproject.org/
