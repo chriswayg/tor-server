@@ -65,8 +65,8 @@ ExitPolicy reject6 *:*
 SocksPort 0
 ControlSocket 0
 
-#Nickname Tor4tests         # only use letters and numbers
-#ContactInfo tor4tests@example.org
+#Nickname Tor4example         # only use letters and numbers
+#ContactInfo tor4@example.org
 ```
 
 #### Run Tor with a mounted `torrc` configuration

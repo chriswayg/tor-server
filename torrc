@@ -40,5 +40,5 @@ IPv6Exit 1
 
 ## If no Nickname or ContactInfo is set, docker-entrypoint will use
 ## the environment variables to add Nickname/ContactInfo below
-#Nickname Tor4tests                 # only use letters and numbers
-#ContactInfo tor4tests@example.org
+#Nickname Tor4example                 # only use letters and numbers
+#ContactInfo tor4@example.org
