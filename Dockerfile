@@ -49,6 +49,7 @@ RUN apt-get update &&  \
     tor \
     tor-geoipdb \
     deb.torproject.org-keyring && \
+  mkdir -pv /usr/local/etc/tor/ && \
   mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
     # Install obfs4proxy & meek-server
     && export GOPATH="/tmp/go" \
