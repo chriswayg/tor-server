@@ -3,7 +3,8 @@ FROM golang:stretch AS go-build
 
 # Build /go/bin/obfs4proxy & /go/bin/meek-server
 RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
- && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server
+ && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
+ && cp -rv /go/bin /usr/local/
 
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
@@ -64,8 +65,8 @@ RUN apt-get update &&  \
   usermod -l tord debian-tor && \
   groupmod -n tord debian-tor
 
-COPY --from=go-build /bin/obfs4proxy  /usr/local/bin/obfs4proxy
-COPY --from=go-build /bin/meek-server /usr/local/bin/meek-server
+# Copy obfs4proxy & meek-server
+COPY --from=go-build /usr/local/bin/ /usr/local/bin/
 
 # Copy Tor configuration file
 COPY ./torrc /etc/tor/torrc
