@@ -7,7 +7,7 @@ MAINTAINER Christian chriswayg@gmail.com
 ARG DEBIAN_FRONTEND=noninteractive
 
 # If no Nickname is set, a random string will be added to 'Tor4'
-ENV TOR_USER=debian-tor \
+ENV TOR_USER=tord \
     TOR_NICKNAME=Tor4 \
     TERM=xterm
 
@@ -20,7 +20,6 @@ RUN apt-get update &&  \
       ca-certificates \
       dirmngr \
       apt-utils \
-      pwgen \
       gnupg && \
   # Add torproject.org Debian repository, which will always install the latest stable version
 	GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89; \
@@ -42,11 +41,13 @@ RUN apt-get update &&  \
   echo "deb https://deb.torproject.org/torproject.org stretch main"   >  /etc/apt/sources.list.d/tor-apt-sources.list && \
   echo "deb-src https://deb.torproject.org/torproject.org stretch main" >> /etc/apt/sources.list.d/tor-apt-sources.list && \
   echo "deb http://deb.torproject.org/torproject.org obfs4proxy main" >> /etc/apt/sources.list.d/tor-apt-sources.list && \
-# Install tor and obfs4proxy & backup torrc
+# Install tor with GeoIP and obfs4proxy & backup torrc
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y \
+    pwgen \
     iputils-ping \
     tor \
+    tor-geoipdb \
     deb.torproject.org-keyring && \
   mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
     # Install obfs4proxy & meek-server
@@ -57,15 +58,17 @@ RUN apt-get update &&  \
     && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
     && mv -v /tmp/go/bin/meek-server /usr/local/bin/ \
     && rm -rf /tmp/go && \
-  # Download GeoIP files
-  cd /usr/share/tor && \
-  apt-get -d source tor && \
-  tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip && \
-  tar --strip-components=3 --wildcards -zxvf tor_*.orig.tar.gz tor-*/src/config/geoip6 && \
-  rm -v tor_* && \
-  apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Debian creates an unprivileged tor user: debian-tor
+  apt-get purge --auto-remove -y \
+    golang \
+    git \
+    apt-transport-https \
+    dirmngr \
+    apt-utils \
+    gnupg && \
+  apt-get clean && rm -rf /var/lib/apt/lists/* && \
+  # Rename Debian unprivileged user  to tord
+  usermod -l tord debian-tor && \
+  groupmod -n tord debian-tor
 
 # Copy Tor configuration file
 COPY ./torrc /etc/tor/torrc

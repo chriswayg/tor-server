@@ -47,7 +47,7 @@ For customisation copy `torrc` to the host and configure the desired settings.
 ```
 ##=================== /etc/torrc =====================##
 # Run Tor as a regular user (do not change this)
-User debian-tor
+User tord
 DataDirectory /var/lib/tor
 
 # Port to advertise for incoming Tor connections.
