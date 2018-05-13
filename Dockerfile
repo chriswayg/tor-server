@@ -1,4 +1,12 @@
 # Dockerfile for Tor Relay Server with obfs4proxy
+# Multi-Stage build
+FROM golang:stretch AS go-build
+
+# Build obfs4proxy & meek-server
+RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
+    # /go/bin/obfs4proxy
+ && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
+    # /go/bin/meek-server
 
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
@@ -14,8 +22,6 @@ ENV TOR_USER=tord \
 # Install prerequisites
 RUN apt-get update &&  \
 	apt-get install --no-install-recommends --no-install-suggests -y \
-      golang \
-      git \
       apt-transport-https \
       ca-certificates \
       dirmngr \
@@ -50,18 +56,8 @@ RUN apt-get update &&  \
     tor-geoipdb \
     deb.torproject.org-keyring && \
   mkdir -pv /usr/local/etc/tor/ && \
-  mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
-    # Install obfs4proxy & meek-server
-    && export GOPATH="/tmp/go" \
-    && go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
-    && mv -v /tmp/go/bin/obfs4proxy /usr/local/bin/ \
-    && rm -rf /tmp/go \
-    && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
-    && mv -v /tmp/go/bin/meek-server /usr/local/bin/ \
-    && rm -rf /tmp/go && \
+  mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample && \
   apt-get purge --auto-remove -y \
-    golang \
-    git \
     apt-transport-https \
     dirmngr \
     apt-utils \
@@ -70,6 +66,9 @@ RUN apt-get update &&  \
   # Rename Debian unprivileged user to tord
   usermod -l tord debian-tor && \
   groupmod -n tord debian-tor
+
+COPY --from=go-build /bin/obfs4proxy  /usr/local/bin/obfs4proxy
+COPY --from=go-build /bin/meek-server /usr/local/bin/meek-server
 
 # Copy Tor configuration file
 COPY ./torrc /etc/tor/torrc
