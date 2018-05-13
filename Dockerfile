@@ -48,7 +48,7 @@ RUN apt-get update &&  \
     iputils-ping \
     tor \
     deb.torproject.org-keyring && \
-  mv -v /etc/tor/torrc /etc/tor/torrc.default \
+  mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
     # Install obfs4proxy & meek-server
     && export GOPATH="/tmp/go" \
     && go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \

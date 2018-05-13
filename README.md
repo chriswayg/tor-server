@@ -39,9 +39,9 @@ This command will run a Tor relay server with a safe default configuration (not 
 Check with ```docker logs -f tor-server_relay_1```  If you see the message: ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after a while, your server started successfully. Then wait a bit longer and search for your server here: [Relay Search](https://metrics.torproject.org/rs.html)
 
 ### Customize Tor configuration
-You may want to configure additional options to control your monthly data usage, or to run Tor as a hidden obfuscated bridge. Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to a recent fully commented `torrc.default`:
+You may want to configure additional options to control your monthly data usage, or to run Tor as a hidden obfuscated bridge. Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to a recent fully commented `torrc.sample`:
 
-`docker cp tor-server_relay_1:/etc/tor/torrc.default ./`
+`docker cp tor-server_relay_1:/usr/local/etc/tor/torrc.sample ./`
 
 For customisation copy `torrc` to the host and configure the desired settings.
 ```

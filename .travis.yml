@@ -18,8 +18,8 @@ script:
   - docker run -d --init --name=tor-server_relay_1 --net=host -e TOR_NICKNAME=Tor4 -e CONTACT_EMAIL=tor4@example.org -v $PWD/tests/tor-data:/var/lib/tor --restart=always local-tor-server
   - sleep 30
   - docker logs tor-server_relay_1
-  - docker cp tor-server_relay_1:/etc/tor/torrc.default ./
-  - cat torrc.default
+  - docker cp tor-server_relay_1:/usr/local/etc/tor/torrc.sample ./
+  - cat torrc.sample
   - docker stop tor-server_relay_1
   - docker rm tor-server_relay_1
 

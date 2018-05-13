@@ -1,5 +1,5 @@
 ##=================== /etc/torrc =====================##
-# see /etc/torrc/torrc.default and https://www.torproject.org/docs/tor-manual.html.en
+# see /usr/local/etc/tor/torrc.sample and https://www.torproject.org/docs/tor-manual.html.en
 
 # Run Tor as a regular user (do not change this)
 User debian-tor
