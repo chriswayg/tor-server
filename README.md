@@ -36,7 +36,7 @@ docker run -d --init --name=tor-server_relay_1 --net=host \
 
 This command will run a Tor relay server with a safe default configuration (not as an exit node). The server will autostart after restarting the host system. If you do not change the default Nickname 'Tor4', the startup script will add a randomized, pronouncable suffix to create a unique name. All Tor data will be preserved in the mounted Data Directory, even if you upgrade or remove the container.
 
-Check with ```docker logs -f tor-server_relay_1```  If you see the message: ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after a while, your server started successfully. The wait a bit longer and search for your server here: [Relay Search](https://metrics.torproject.org/rs.html)
+Check with ```docker logs -f tor-server_relay_1```  If you see the message: ```[notice] Self-testing indicates your ORPort is reachable from the outside. Excellent. Publishing server descriptor.``` at the bottom after a while, your server started successfully. Then wait a bit longer and search for your server here: [Relay Search](https://metrics.torproject.org/rs.html)
 
 ### Customize Tor configuration
 You may want to configure additional options to control your monthly data usage, or to run Tor as a hidden obfuscated bridge. Look at the Tor manual with all [Configuration File Options](https://www.torproject.org/docs/tor-manual.html.en). Also refer to a recent fully commented `torrc.default`:
@@ -228,6 +228,6 @@ Please use the latest Docker engine available and do not use the engine that shi
 ### License:
  - MIT
 
- * For a very similar image based on Alpine use `tor-alpine`:*
+##### For a very similar image based on tor-alpine use `chriswayg/tor-alpine`
  - https://hub.docker.com/r/chriswayg/tor-alpine
  - https://github.com/chriswayg/tor-alpine
