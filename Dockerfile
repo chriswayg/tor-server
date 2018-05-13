@@ -1,12 +1,9 @@
-# Dockerfile for Tor Relay Server with obfs4proxy
-# Multi-Stage build
+# Dockerfile for Tor Relay Server with obfs4proxy (Multi-Stage build)
 FROM golang:stretch AS go-build
 
-# Build obfs4proxy & meek-server
+# Build /go/bin/obfs4proxy & /go/bin/meek-server
 RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
-    # /go/bin/obfs4proxy
- && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
-    # /go/bin/meek-server
+ && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server
 
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
