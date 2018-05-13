@@ -66,7 +66,7 @@ RUN apt-get update &&  \
     apt-utils \
     gnupg && \
   apt-get clean && rm -rf /var/lib/apt/lists/* && \
-  # Rename Debian unprivileged user  to tord
+  # Rename Debian unprivileged user to tord
   usermod -l tord debian-tor && \
   groupmod -n tord debian-tor
 
