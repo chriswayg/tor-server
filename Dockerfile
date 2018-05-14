@@ -9,15 +9,15 @@ RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
 FROM debian:stretch-slim
 MAINTAINER Christian chriswayg@gmail.com
 
-ARG GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 \
-    APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE="True" \
-    found=""; \
-    DEBIAN_FRONTEND=noninteractive
+ARG GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE="True"
+ARG DEBIAN_FRONTEND=noninteractive
+ARG found=""
 
 # Set a default Nickname
-ENV TOR_USER=tord \
-    TOR_NICKNAME=Tor4 \
-    TERM=xterm
+ENV TOR_NICKNAME=Tor4
+ENV TOR_USER=tord
+ENV TERM=xterm
 
 # Install prerequisites
 RUN apt-get update \
