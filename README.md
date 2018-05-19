@@ -71,10 +71,12 @@ ControlSocket 0
 
 #### Run Tor with a mounted `torrc` configuration
 
-Mount your customized `torrc` from the current directory of the host into the container with this command:
-```
-nano torrc
+Modify your Tor configuration:
 
+`nano torrc`
+
+Then mount your customized `torrc` from the current directory of the host into the container with this command:
+```
 mkdir -vp tor-data && \
 docker run -d --init --name=tor-server_relay_1 --net=host \
 -e TOR_NICKNAME=Tor4 \
@@ -141,7 +143,7 @@ docker-compose exec relay bash
 
 ### Run Tor relay with IPv6
 
-If your host supports IPv6, please enable it! The host system or VPS (for example Vultr) needs to have IPv6 activated. From your host server try to ping any IPv6 host: `ping6 -c 5 ipv6.google.com` Then find out your external IPv6 address with this command:
+If your host supports IPv6, please enable it! The host system or VPS (for example Vultr) needs to have IPv6 activated. From your host server try to ping any IPv6 host: `ping6 -c 5 ipv6.google.com` Then find out your external IPv6 address with this command (from dnsutils):
 
 `dig +short -6 myip.opendns.com aaaa @resolver1.ipv6-sandbox.opendns.com`
 
