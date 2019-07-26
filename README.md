@@ -5,11 +5,11 @@
 #### A complete, efficient and secure Tor relay server Docker image
 *This docker image will install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
 
-It includes the latest Tor Debian package from torproject.org which is installed and configured according the Tor project recommendations. Additionally it can be run as a hidden bridge using and obfs4proy as well as meek.
+It includes the latest Tor Debian package from torproject.org which is installed and configured according the Tor project recommendations. Additionally it can be run as a hidden bridge using obfs4proy as well as meek.
 
 The Tor network relies on volunteers to donate bandwidth. The more people who run relays, the faster the Tor network will be. If you have at least 2 megabits/s for both upload and download, please help out Tor by configuring your server to be a Tor relay too.
 
-![Tor](https://www.torproject.org/images/tor-logo.jpg "Tor logo")
+![Tor](https://media.torproject.org/image/official-images/2011-tor-logo-flat.svg "Tor logo")
 
 [Tor](https://www.torproject.org) is free software and an open network that helps you defend against
 traffic analysis, a form of network surveillance that threatens personal
