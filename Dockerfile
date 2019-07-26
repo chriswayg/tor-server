@@ -28,6 +28,8 @@ RUN apt-get update \
         apt-utils \
         gnupg \
  # Add torproject.org Debian repository for stable Tor version \
+ # TODO: (because keyservers do not work)
+ # try: curl https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import
  && for server in \
     		ha.pool.sks-keyservers.net \
     		hkp://keyserver.ubuntu.com:80 \
