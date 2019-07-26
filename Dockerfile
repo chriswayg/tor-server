@@ -33,7 +33,6 @@ RUN apt-get update \
  && gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add - \
  && echo "deb https://deb.torproject.org/torproject.org buster main"   >  /etc/apt/sources.list.d/tor-apt-sources.list \
  && echo "deb-src https://deb.torproject.org/torproject.org buster main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
- && echo "deb http://deb.torproject.org/torproject.org obfs4proxy main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  # Install tor with GeoIP and obfs4proxy & backup torrc \
  && apt-get update \
  && apt-get install --no-install-recommends --no-install-suggests -y \
