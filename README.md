@@ -3,7 +3,7 @@
 [![](https://images.microbadger.com/badges/image/chriswayg/tor-server.svg)](https://microbadger.com/images/chriswayg/tor-server)
 
 #### A complete, efficient and secure Tor relay server Docker image
-*This docker image will update automatically each time the Debian Stretch base image is updated and install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
+*This docker image will install the latest current stable version of Tor server. It will run Tor as an unprivileged regular user, as recommended by torproject.org.*
 
 It includes the latest Tor Debian package from torproject.org which is installed and configured according the Tor project recommendations. Additionally it can be run as a hidden bridge using and obfs4proy as well as meek.
 
@@ -220,7 +220,7 @@ Please use the latest Docker engine available and do not use the engine that shi
 ### Guides
 
 - [Tor Relay Guide](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide)
-- [Tor on Debian Installation Instructions](https://www.torproject.org/docs/debian.html.en)
+- [Tor on Debian Installation Instructions 2019](https://2019.www.torproject.org/docs/debian.html.en)
 - [Torproject - git repo](https://github.com/torproject/tor)
 - [obfs4proxy on Debian - Guide to run an obfuscated bridge to help censored users connect to the Tor network.](https://trac.torproject.org/projects/tor/wiki/doc/PluggableTransports/obfs4proxy)
 - [obfs4 - The obfourscator - Github](https://github.com/Yawning/obfs4)
