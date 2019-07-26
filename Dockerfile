@@ -28,25 +28,9 @@ RUN apt-get update \
         apt-utils \
         gnupg \
  # Add torproject.org Debian repository for stable Tor version \
- # TODO: (because keyservers do not work)
- # try: curl https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import
- && for server in \
-    		ha.pool.sks-keyservers.net \
-    		hkp://keyserver.ubuntu.com:80 \
-    		hkp://p80.pool.sks-keyservers.net:80 \
-                ipv4.pool.sks-keyservers.net \
-                keys.gnupg.net \
-		pgp.uni-mainz.de \
-                hkps.pool.sks-keyservers.net \
-    		pgp.mit.edu; \
-  	do \
-    		echo "Fetching GPG key $GPGKEY from $server" \
-     && apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPGKEY" \
-     && found=yes \
-     && break; \
-	  done; \
-	  test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPGKEY" && exit 1; \
-    echo "deb https://deb.torproject.org/torproject.org stretch main"   >  /etc/apt/sources.list.d/tor-apt-sources.list \
+ && curl https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import \
+ && gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add - \
+ && echo "deb https://deb.torproject.org/torproject.org stretch main"   >  /etc/apt/sources.list.d/tor-apt-sources.list \
  && echo "deb-src https://deb.torproject.org/torproject.org stretch main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  && echo "deb http://deb.torproject.org/torproject.org obfs4proxy main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  # Install tor with GeoIP and obfs4proxy & backup torrc \
