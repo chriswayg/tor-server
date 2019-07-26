@@ -32,8 +32,10 @@ RUN apt-get update \
     		ha.pool.sks-keyservers.net \
     		hkp://keyserver.ubuntu.com:80 \
     		hkp://p80.pool.sks-keyservers.net:80 \
-        ipv4.pool.sks-keyservers.net \
-        keys.gnupg.net \
+                ipv4.pool.sks-keyservers.net \
+                keys.gnupg.net \
+		pgp.uni-mainz.de \
+                hkps.pool.sks-keyservers.net \
     		pgp.mit.edu; \
   	do \
     		echo "Fetching GPG key $GPGKEY from $server" \
