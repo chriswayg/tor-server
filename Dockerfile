@@ -27,6 +27,7 @@ RUN apt-get update \
         dirmngr \
         apt-utils \
         gnupg \
+        curl \
  # Add torproject.org Debian repository for stable Tor version \
  && curl https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import \
  && gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add - \
