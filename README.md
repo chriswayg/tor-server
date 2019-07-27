@@ -191,31 +191,19 @@ You should see something like this in the log: `[notice] Opening OR listener on 
 
 ### Install Docker and Docker Compose
 
-Quick installation for most operation systems (with links how to install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/):
+Links how to install
 
-- Install Docker
+- [Docker](https://docs.docker.com/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-```
-curl -sSL https://get.docker.com/ | CHANNEL=stable sh
-systemctl status docker
-```
-
-After the installation process is finished, you may need to enable the service and make sure it is started (e.g. CentOS 7).
+After the installation process is finished, you may need to enable the service and make sure it is started (e.g. CentOS).
 
 ```
 systemctl enable docker
 systemctl start docker
 ```
 
-- Install Docker-Compose
-
-```
-curl -L https://github.com/docker/compose/releases/download/$(curl -Ls https://www.servercow.de/docker-compose/latest.php)/docker-compose-$(uname -s)-$(uname -m) > /usr/local/bin/docker-compose
-chmod -v +x /usr/local/bin/docker-compose
-docker-compose --version
-```
-
-Please use the latest Docker engine available and do not use the engine that ships with your distro's repository.
+Please use the latest Docker engine available (do not use the possibly outdated engine that ships with your distro's repository).
 
 ### Guides
 
