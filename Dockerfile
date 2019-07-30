@@ -1,12 +1,12 @@
 # Dockerfile for Tor Relay Server with obfs4proxy (Multi-Stage build)
-FROM golang:stretch AS go-build
+FROM golang:buster AS go-build
 
 # Build /go/bin/obfs4proxy & /go/bin/meek-server
 RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
  && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
  && cp -rv /go/bin /usr/local/
 
-FROM debian:stretch-slim
+FROM debian:buster-slim
 MAINTAINER Christian chriswayg@gmail.com
 
 ARG GPGKEY=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
@@ -27,24 +27,12 @@ RUN apt-get update \
         dirmngr \
         apt-utils \
         gnupg \
+        curl \
  # Add torproject.org Debian repository for stable Tor version \
- && for server in \
-    		ha.pool.sks-keyservers.net \
-    		hkp://keyserver.ubuntu.com:80 \
-    		hkp://p80.pool.sks-keyservers.net:80 \
-        ipv4.pool.sks-keyservers.net \
-        keys.gnupg.net \
-    		pgp.mit.edu; \
-  	do \
-    		echo "Fetching GPG key $GPGKEY from $server" \
-     && apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPGKEY" \
-     && found=yes \
-     && break; \
-	  done; \
-	  test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPGKEY" && exit 1; \
-    echo "deb https://deb.torproject.org/torproject.org stretch main"   >  /etc/apt/sources.list.d/tor-apt-sources.list \
- && echo "deb-src https://deb.torproject.org/torproject.org stretch main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
- && echo "deb http://deb.torproject.org/torproject.org obfs4proxy main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
+ && curl https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import \
+ && gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add - \
+ && echo "deb https://deb.torproject.org/torproject.org buster main"   >  /etc/apt/sources.list.d/tor-apt-sources.list \
+ && echo "deb-src https://deb.torproject.org/torproject.org buster main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  # Install tor with GeoIP and obfs4proxy & backup torrc \
  && apt-get update \
  && apt-get install --no-install-recommends --no-install-suggests -y \
