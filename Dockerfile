@@ -35,11 +35,20 @@ RUN apt-get update \
  && echo "deb-src https://deb.torproject.org/torproject.org buster main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  # Install tor with GeoIP and obfs4proxy & backup torrc \
  && apt-get update \
+ && apt-get install -y build-essential fakeroot devscripts libcap-dev \
+ && apt-get build-dep -y tor \
+ && apt-get source tor \
+ && cd tor-*/ \
+ && debuild -rfakeroot -uc -us \
+ && cd .. \
+ && dpkg -i tor_*.deb tor-*.deb \
+ && tor --version \
+ && rm -rf tor-*/ tor_*.deb tor-*.deb \
  && apt-get install --no-install-recommends --no-install-suggests -y \
         pwgen \
         iputils-ping \
-        tor \
-        tor-geoipdb \
+ #       tor \
+ #       tor-geoipdb \
         deb.torproject.org-keyring \
  && mkdir -pv /usr/local/etc/tor/ \
  && mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
