@@ -35,8 +35,13 @@ RUN apt-get update \
  && echo "deb-src https://deb.torproject.org/torproject.org buster main" >> /etc/apt/sources.list.d/tor-apt-sources.list \
  # Install tor with GeoIP and obfs4proxy & backup torrc \
  && apt-get update \
- && apt-get install -y build-essential fakeroot devscripts libcap-dev \
- && apt-get build-dep -y tor \
+ && apt-get install --no-install-recommends --no-install-suggests -y \
+        build-essential \
+        fakeroot \
+        devscripts \
+        libcap-dev \
+ && apt-get build-dep --no-install-recommends --no-install-suggests -y \
+        tor \
  && apt-get source tor \
  && cd tor-*/ \
  && debuild -rfakeroot -uc -us \
