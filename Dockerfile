@@ -2,7 +2,7 @@
 FROM golang:buster AS go-build
 
 # Build /go/bin/obfs4proxy & /go/bin/meek-server
-RUN go get -v git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy \
+RUN go get -v gitlab.com/yawning/obfs4.git/obfs4proxy \
  && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
  && cp -rv /go/bin /usr/local/
 
@@ -46,10 +46,11 @@ RUN apt-get update \
  && mkdir tor-install \
  && cd tor-install/ \
  && apt-get source tor \
- && cd tor-install/tor-*/ \
+ && cd tor-*/ \
  && debuild -rfakeroot -uc -us \
- && cd tor-install/ \
+ && cd .. \
  && dpkg -i tor_*.deb tor-*.deb \
+ && cd .. \
  && rm -rf tor-install/ \
  && tor --version \
  && apt-get install --no-install-recommends --no-install-suggests -y \
