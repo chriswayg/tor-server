@@ -2,8 +2,8 @@
 FROM golang:buster AS go-build
 
 # Build /go/bin/obfs4proxy & /go/bin/meek-server
-RUN go get -v gitlab.com/yawning/obfs4.git/obfs4proxy \
- && go get -v git.torproject.org/pluggable-transports/meek.git/meek-server \
+RUN go install -v gitlab.com/yawning/obfs4.git/obfs4proxy@latest \
+ && go install -v git.torproject.org/pluggable-transports/meek.git/meek-server@latest \
  && cp -rv /go/bin /usr/local/
 
 FROM debian:buster-slim
